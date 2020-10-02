@@ -1,0 +1,205 @@
+﻿body {
+/*	background: #fff; */
+	margin: 0px;
+	padding: 0px;
+	font-family: Arial, Helvetica, sans-serif;
+	}
+
+.ahem { display: none; }
+
+h1, h2, h3, h4, h5, h6 { color: #000; }
+
+a:link, a:visited { color: #069; }
+
+/*----------- MENU BAR -----------*/
+
+td.navbar p { 
+	font-size: 11px;
+	font-weight: bold; 
+	color: #c0c0c0;
+	margin: 0px;
+	background: #000;
+	padding: 2px 0px 2px 156px;
+	}
+
+.navbarFontStyle { 
+	font-size: 11px;
+	font-weight: bold; 
+	color: #b3bfd6;;
+	margin: 0px;
+	background: transparent; 
+	padding: 2px 0px 2px 156px;
+	}
+	
+td.navbar a:link, td.navbar a:visited { 
+	color: #fc9; 
+	font-family: Verdana; 
+	font-weight: normal; 
+	font-size: 11px; 
+	text-decoration: none;  
+	padding: 2px;
+	}
+	
+td.navbar a:hover {
+	color: #fff;
+	}
+	
+/*--------  MAIN CONTENT ----------*/	
+
+td#content {
+	padding: 3% 5% 3% 5%; 
+	}
+	
+td#content p {
+	font-family: Georgia, Times New Roman, serif;
+	font-size: 80%; 
+	color: #333;
+	margin-top:2%;
+	padding-bottom: 0%;
+	}
+
+td#content li {
+	font-family: Georgia, Times New Roman, serif;
+	font-size: 80%; 
+	color: #333;
+	}
+	
+td#content td li{
+	font-family: Georgia, Times New Roman, serif;
+	font-size: 100%; 
+	color: #333;
+	}
+	
+td#content h1, td#content h2, td#content h3, td#content h4, td#content h5, td#content h6 {
+	font-family: Arial, Helvetica, sans-serif;
+	color: #036;
+	margin: 0px;
+	padding-bottom: 0px;
+	}
+	
+td#content h1 { font-size: 160%; }
+td#content h2 { font-size: 120%; }
+td#content h3 { font-size: 100%; } 
+td#content h4 { font-size: 90%; } 
+td#content h5 { font-size: 80%; } 
+td#content h6 { font-size: 70%; } 
+td#content h4.subhead { padding-top: 15px; }	
+td#content h3.subhead { padding-top: 15px; }	
+
+td#content td { 
+	padding: 3px; 
+	font-size: 80%;
+	font-family: Arial, Helvetica, sans-serif; 
+	}
+
+div#sidebar {
+	background: transparent;
+	margin-top: 0px;
+	margin-right: 2px;
+	margin-left: 5%;
+	margin-bottom: 2%;
+	float: right;
+	width: 30%;
+	}
+
+div#sidebar p { 
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 75%;
+	color: #666;
+	padding-bottom: 8px; 
+	margin-top: 5%;
+	margin-bottom: 5%;
+	line-height: 110%;
+	}
+	
+#sideMenuLinks a:link, #sideMenuLinks a:visited { 
+	text-decoration: none;
+	}	
+
+/*-- Use the following for any page element that you DON'T want to print --*/
+
+
+.printhide {display: none; }
+
+
+
+/*---------- VERTICAL MENU ----------*/
+	
+div#verticalMenu { display: none; }
+
+
+
+
+/*------- SEARCH FORM --------*/
+	
+form.search { display: none; }
+
+	
+p.footer {
+	font-family: verdana, sans-serif;
+	font-size: 60%;
+	padding: 5px 4px 15px 4px;
+	margin-top: 20px;
+	border-top: 1px solid #ccc;
+	}
+	
+p.footer1col {
+	font-family: verdana, sans-serif;
+	font-size: 60%;
+	padding: 5px 4px 20px 50px;
+	margin-top: 5px;
+	border-top: 1px solid #ccc;
+	}
+	
+/*------- Floating Right Div ------- */
+
+div#Rightsidebar {
+	background: transparent;
+	margin-right: 2px;
+	margin-left: 5%;
+	margin-bottom: 2%;
+	float: right;
+	width: 30%;
+	}
+
+div#Rightsidebar p { 
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 75%;
+	color: #666;
+	padding-bottom: 8px; 
+	margin-top: 5%;
+	margin-bottom: 5%;
+	line-height: 110%;
+	}
+
+div#Rightsidebar B { 
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	}
+	
+div#Rightsidebar p.Columntitle {
+ 	font-family: Verdana, Arial, Helvetica, sans-serif;
+ 	font-size: 80%;
+ 	font-weight:bold; 
+ 	color: #000000;
+ 	padding-bottom:5px;  
+ 	border-bottom: 1px solid #666;
+	}
+	
+/*------- Memo Style ------- */ 
+	
+#printhead { 
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 7pt;
+	color: #000; 
+	text-align: right;}
+
+/*------- Hidden Text ------- */ 
+	
+.hiddenText { 
+	
+	font-family: Georgia, Times New Roman, serif;
+	font-size: 80%; 
+	color: #333;
+	margin-top:2%;
+	padding-bottom: 0%;
+ }

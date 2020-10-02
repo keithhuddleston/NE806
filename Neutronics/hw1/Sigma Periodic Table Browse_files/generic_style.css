@@ -1,0 +1,378 @@
+body {
+	background: #fff; 
+	margin: 0px;
+	padding: 0px;
+	font-family: Arial, Helvetica, sans-serif;
+	}
+
+.ahem { display: none; }
+
+h1, h2, h3, h4, h5, h6 { color: #000; }
+
+a:link, a:visited { color: #069; }
+a:hover { color: #f90; text-decoration: none; }
+
+span.redEmphasis { color: #CC0000; font-weight: bold }
+
+	
+
+/*----------- MENU BAR -----------*/
+
+td.navbar p { 
+	font-size: 11px;
+	font-weight: bold; 
+	color: #c0c0c0;
+	margin: 0px;
+	background: #000;
+	padding: 2px 0px 2px 156px;
+	}
+	
+td.navbar a:link, td.navbar a:visited { 
+	color: #fc9; 
+	font-family: Verdana; 
+	font-weight: normal; 
+	font-size: 11px; 
+	text-decoration: none;  
+	padding: 2px;
+	}
+	
+td.navbar a:hover {
+	color: #fff;
+	}
+	
+/*--------  MAIN CONTENT ----------*/	
+
+	
+td#content {
+	padding: 4% 5% 5% 2%; 
+	}
+	
+td#content p, div#center_col p, div#head p {
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 80%; 
+	color: #333;
+	margin-top: 0%;
+	padding-bottom: 0%;
+	}
+	
+td#content table, div#center_col table {
+        font-family: Verdana, Helvetica, sans-serif; 
+	color: #333;
+	margin-top: 0pt;
+	margin-bottom: 0pt; 
+	}
+	
+td#content p#breadcrumb { 
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 0px;
+	background: #eaeaea;
+	}
+
+td#content li, div#center_col li {
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 80%; 
+	color: #333;
+	padding-bottom: 0px;
+	}
+	
+td#content td li, div#center_col td li{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 100%; 
+	color: #333;
+	}
+	
+td#content li li{
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 100%; 
+	color: #333;
+	list-style-type:square;
+	}	
+	
+td#content p.boxed a:link, td#content p.boxed a:visited { color: #CC3300; }
+td#content p.boxed a:hover { color: #FF0000; }
+	
+td#content p.graybox {
+	padding: 7px;
+	background: #EAEAEA;
+	border: 1px solid #C5C5C5;
+	font-size: 80%;
+	font-family: Arial, Helvetica, sans-serif; 
+	color: #000;
+	}
+
+td#content h1, td#content h2, td#content h3, td#content h4, td#content h5, td#content h6,
+div#center_col h1, div#center_col h2, div#center_col h3, div#center_col h4, div#center_col h5,
+div#center_col h6 {
+	font-family: Arial, Helvetica, sans-serif;
+	color: #036;
+	margin: 0px;
+	padding-bottom: 0px;
+	}
+	
+td#content h1, div#center_col h1 { font-size: 160%; }
+td#content h2, div#center_col h2 { font-size: 120%; }
+td#content h3, div#center_col h3 { font-size: 100%; } 
+td#content h4, div#center_col h4 { font-size: 90%; } 
+td#content h5, div#center_col h5 { font-size: 80%; } 
+td#content h6, div#center_col h6 { font-size: 70%; } 
+td#content h7, div#center_col h7 { font-size: 75%; } 
+td#content h4.subhead { padding-top: 0px; }	
+td#content h3.subhead { padding-top: 0px; }	
+
+td#content td, div#center_col td { 
+	font-size: 80%;
+	font-family: Arial, Helvetica, sans-serif; 
+	}
+	
+td#content td p, div#center_col td p { 
+	font-size: 100%;
+	/* Following 3 lines fix an IE bug. If margin uses percentage, or is not specified, cell length goes infinite. */
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding: 0;
+	font-family: Arial, Helvetica, sans-serif; 
+	}
+	
+td#content p.boxed, div#head p.boxed {
+	padding: 7px;
+	background: #ffc;
+	border: 1px solid #fc6;
+	font-size: 80%;
+	font-family: Arial, Helvetica, sans-serif; 
+	color: #000;
+	}
+
+td#content p.sans, div#center_col p.sans {
+	font-family: Arial, Helvetica, sans-serif; 
+	}
+
+td#content td p.caption {
+	color: #069;
+	margin: 0px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 95%;
+	padding-left: 10px;
+	}
+
+td#content img.pic_right {
+	margin: 0 0 2% 3%;
+	float: right;
+	}
+	
+td#content img.pic_left {
+	margin: 0 3% 2% 0%;
+	float: left;
+	}
+/*----------------------------------*/
+	
+div#holidayBlock { 
+	margin: 20px 2px 2px 2px; 
+	padding: 0px;
+	background: #ffc;
+	border: 1px solid #fc9;
+	}
+
+div#holidayBlock p { 
+	font-family: Arial, Helvetica, sans-serif;
+	color: #933;
+	font-size: 12px;
+	margin: 0px;
+	padding: 5px;
+	}
+	
+/*---------- VERTICAL MENU ----------*/
+	
+div#verticalMenu { color: transparent; }
+
+div#verticalMenu p { 
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 70%; 
+	margin:2px 0px 2px 2px; 
+	padding: 0px;
+	background: transparent;  
+	border: 1px solid #BBBDD6;
+	}
+
+div#verticalMenu a {	
+	display: block;
+	text-decoration: none; 
+	margin:0px; 
+	padding: 2px 3px 2px 3px;
+	}
+	
+div#verticalMenu p.category { 
+	padding: 2px 3px 2px 3px;
+	background: #8282AF;
+	color: #fff;
+	font-weight: bold;
+	font-family: Arial, sans-serif;
+	}
+
+div#verticalMenu a:link, div#verticalMenu a:visited { 
+	color: #474774; 
+	text-decoration: none;
+	background: #E7E8FC;
+	}
+	
+div#verticalMenu a:hover { 
+	color: #000;  
+	background: #fff;
+	}
+		
+div#verticalMenu p.contact { 
+	color: #666;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 70%; 
+	margin:2px 0px 2px 2px;
+	padding: 2px 3px 2px 3px;
+	background: #E7E8FC;  
+	border: 1px solid #D5D4D4;
+	}
+	
+div#verticalMenu a.contact:link, div#verticalMenu a.contact:visited { 
+	display: block;
+	text-decoration: none; 
+	margin:0px; 
+	padding: 2px 3px 2px 0px;
+	color: #666; 
+	text-decoration: none;
+	background: #E7E8FC;
+	}
+	
+div#verticalMenu a.contact:hover { 
+	color: #000;  
+	background: #fff;
+	}
+	
+/*------- LEFT COLUMN, BELOW verticalMenu -----*/
+
+div.leftCol {
+	margin-left: 8px;
+	}
+	
+div.leftCol p {
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 70%;
+	color: #666;
+	}
+
+/*------- SEARCH FORM --------*/
+	
+form.search { 
+	padding: 5px; 
+	margin: 0px;
+	background: #eaeaea;
+	}
+
+form.search a { display: inline; background: transparent; }
+	
+form.search a:link, form.search a:visited, form.search a:active { 
+	text-decoration: underline;
+	font-family: Arial, Verdana, sans-serif;
+	font-size: 11px;
+	padding: 3px 0px 0px 0px;
+	margin: 0px;
+	}
+
+form.search a:hover { 
+	color: red; 
+	background: transparent; 
+	text-decoration: none; 
+	}
+	
+form.search p.searchHead {
+	margin: 0px;
+	padding: 0px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: #336;
+	}
+	
+p.footer {
+	font-family: verdana, sans-serif;
+	font-size: 60%;
+	padding: 5px 4px 20px 4px;
+	margin-top: 5px;
+	margin-right: 5px;
+	border-top: 1px solid #ccc;
+	}
+	
+p.footer1col {
+	font-family: verdana, sans-serif;
+	font-size: 60%;
+	padding: 5px 4px 20px 50px;
+	margin-top: 5px;
+	border-top: 1px solid #ccc;
+	}
+	
+/*----- Related News Headline Links --------*/
+
+div#headlines {
+	/*border: 1px dotted #ccc;*/
+	margin: 20px 0px 10px 2px;
+	background: transparent;
+	padding-bottom: 0px;
+	border-bottom: 1px dotted #808080;
+	}
+	
+div#headlines p {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 70%;
+	padding: 7px 5px 7px 5px;
+	margin: 0;
+	line-height: 110%;
+	border-top: 1px dotted #808080;
+	}
+	
+div#headlines a:link, div#headlines a:visited {
+	text-decoration: none;
+	color: #099;
+	}
+
+div#headlines a:hover { color: red; }
+
+
+	
+/*------- 3-column Styles ------- */
+
+div#sidebar {
+	margin: 4% 3px 2% 2%;
+	padding: 6px;
+	float: right;
+	width: 30%;
+	border: 1px dotted #ccc;
+	}
+
+div#sidebar p { 
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 75%;
+	color: #333;
+	padding-bottom: 8px; 
+	margin-top: 5%;
+	margin-bottom: 5%;
+	line-height: 110%;
+	}
+	
+div#head {
+	padding: 4% 10% 1% 5%;
+	}
+	
+div#head h1, div#head h2, div#head h3 {
+	margin: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #036;
+	}
+
+div#head h1 { font-size: 160%; }
+div#head h2 { font-size: 120%; }
+div#head h3 { font-size: 100%; }
+	
+div#center_col {
+	padding: 0% 10% 5% 0%;
+	}<br>
+<p align="center"><b><font size="2" face="Arial"><a href="http://www.bnl.gov/bnlweb/security_notice.html">Privacy and Security Notice</a><br><br><br></font></b></p>
+
+
+
+
+
