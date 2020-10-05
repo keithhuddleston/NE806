@@ -7,7 +7,7 @@
 
 # Module Imports =============================================================
 import numpy as np
-
+import openmc as mc
 
 # Group Structure ============================================================
 
@@ -50,6 +50,12 @@ for i in range(len(E0)):
              + sigma_0 * (2*R/(4.55*10**-10/E0[i]**0.5))*(y/(1+y**2))
 
 sigma_e = sigma_e + sigma_p  # Add potential scattering
+
+def phinr(sd, st, E):
+    return 1 / (E*(st+sd))
+
+def phiwr(sd, sa, E):
+    return 1 / (E*(sa+sd))
 
 def fwxs(E, sigma, group):
     
