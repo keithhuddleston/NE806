@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 # Define Parameters Used in Breit-Wigner Formula =============================
 sigma_p = 11.5860  # potential cross section (in barns)
 I = 0  # s wave
-E0, J, GN, GG, GFA, GFB = np.loadtxt('u235processed.txt', unpack=True)
+E0, J, GN, GG, GFA, GFB = np.loadtxt('u235.txt', unpack=True)
 G = GN+GG
 A = 235.0
 E = np.logspace(-1, 3, 10000)

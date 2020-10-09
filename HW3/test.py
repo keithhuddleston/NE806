@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import re
 
-file = open('u235test.txt', 'r')
+file = open('u238test.txt', 'r')
 
 lines = file.readlines()
 l = len(lines)  # Number of Rows
@@ -22,5 +22,7 @@ for i in range(len(lines)):
                 break
         data[i][j] = value
 
-np.savetxt("u235processed.txt", data)
-    
+e = [i[0] for i in data]
+print(len(e))
+print(len(set(e)))
+np.savetxt("u238processed.txt", data)
