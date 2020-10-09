@@ -15,12 +15,12 @@ import re
 # Load in BNL interpreted data files from the Data subfolder
 # ============================================================================
 # Casmo 2 group structure
-c2 = [.001e1, 1.00e-7, 1.00e-11]
+c2 = np.array([.001e1, 1.00e-7, 1.00e-11])*1e6
 
 # Casmo 16 group structure
-c16 = [1.00e1 , 8.21e-1, 5.53e-3, 4.00e-6, 1.30e-6, 1.15e-6, 1.097e-6,
+c16 = np.array([1.00e1 , 8.21e-1, 5.53e-3, 4.00e-6, 1.30e-6, 1.15e-6, 1.097e-6,
        1.02e-6, 9.71e-7, 8.50e-7, 6.25e-7, 3.50e-7, 2.80e-7, 1.40e-7 ,
-       5.80e-8, 3.00e-8, 1.00e-11]
+       5.80e-8, 3.00e-8, 1.00e-11])*1e6
 
 def load_BNL_RP(filename):
     """ File for loading BNL interpreted resonance parameter files
@@ -116,12 +116,12 @@ class isotope:
 # ============================================================================
 
 # Test 1. Check that function form of BW is working right
-E, XS = np.loadtxt('Data/U238_ES.txt', delimiter=',', unpack=True, skiprows=1)
+E, XS = np.loadtxt('Data/U238_NG.txt', delimiter=',', unpack=True, skiprows=1)
 
 I = 0 
 A = 238
 sigma_p = 11.2934
-E1 = np.logspace(-11, 4, 50000)
+E1 = np.logspace(-11, 10, 50000)
 E0, J, GN, GG, GFA, GFB = load_BNL_RP('Data/U238_RP_L0.txt')
 sigma_e, sigma_g = breitWigner(E0, J, GN, GG, GFA, GFB, A, sigma_p, I, E1)
 
@@ -138,20 +138,20 @@ sigma_e1, sigma_g1 = breitWigner(E0, J, GN, GG, GFA, GFB, A, sigma_p, I, E1)
 
 # Plot results
 fig, (ax1, ax2, ax3, ax4) = plt.subplots(nrows=4, ncols=1, figsize=(12,24))
-ax1.loglog(E, XS, E1, sigma_e0, E1, sigma_e, E1, sigma_e1)
+ax1.loglog(E, XS, E1, sigma_g0, E1, sigma_g, E1, sigma_g1)
 ax1.legend(['BNL interpreted', 'Reduced l=0', 'Full l=0', 'Full l=1'])
-ax1.set_xlim(0.1, 700)
+ax1.set_xlim(5, 10)
 ax1.set_ylabel('Cross Section (Barns)')
 
-ax2.loglog(E, XS, E1, sigma_e0, E1, sigma_e, E1, sigma_e1)
+ax2.loglog(E, XS, E1, sigma_g0, E1, sigma_g, E1, sigma_g1)
 ax2.set_xlim(700, 1000)
 ax2.set_ylabel('Cross Section (Barns)')
 
-ax3.loglog(E, XS, E1, sigma_e0, E1, sigma_e, E1, sigma_e1)
+ax3.loglog(E, XS, E1, sigma_g0, E1, sigma_g, E1, sigma_g1)
 ax3.set_xlim(1000, 1300)
 ax3.set_ylabel('Cross Section (Barns)')
 
-ax4.loglog(E, XS, E1, sigma_e0, E1, sigma_e, E1, sigma_e1)
+ax4.loglog(E, XS, E1, sigma_g0, E1, sigma_g, E1, sigma_g1)
 ax4.vlines(c16[1:], ymin=min(sigma_e), ymax=max(sigma_e), linestyle='--')
 ax4.set_xlim(min(c16), max(c16))
 ax4.set_xlabel('Energy (eV)')

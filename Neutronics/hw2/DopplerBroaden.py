@@ -88,15 +88,16 @@ def doppler(E2, E1, S1, T1, T2, m, M, neg=False):
             pass
         else:
             y = -1*y
-        for k in range(len(E1)-1):
-            Ek1 = E1[k]
+        if True:
+        # for k in range(len(E1)-1):
+            Ek1 = E1[:-1]
             xk1 = np.sqrt(alpha*Ek1)
 
-            Ek2 = E1[k+1]
+            Ek2 = E1[1:]
             xk2 = np.sqrt(alpha*Ek2)
 
-            Sk1 = S1[k]
-            Sk2 = S1[k+1]
+            Sk1 = S1[:-1]
+            Sk2 = S1[1:]
 
             Ak = Akf(Ek1, Ek2, Sk1, Sk2)
             Ck = Ckf(Ek1, Ek2, Sk1, Sk2, alpha)
@@ -110,11 +111,12 @@ def doppler(E2, E1, S1, T1, T2, m, M, neg=False):
             H3k = H3(Zk2, Zk1)
             H4k = H4(Zk2, Zk1)
 
-            S2i += H4k * (Ck) \
+            S2i = H4k * (Ck) \
                  + H3k * (4*Ck*y) \
                  + H2k * (Ak+6*Ck*y**2) \
                  + H1k * (2*Ak*y+4*Ck*y**3) \
                  + H0k * (Ak*y**2+Ck*y**4)
+        S2i = sum(S2i)
         S2[i] = S2i/2/y**2
     return S2
 
