@@ -120,7 +120,6 @@ def doppler(E2, E1, S1, T1, T2, m, M, neg=False):
         S2[i] = S2i/2/y**2
     return S2
 
-
 m = 1.009
 M = 238.051
 Emesh = np.linspace(1, 12, 3000)
