@@ -9,6 +9,7 @@
 # ============================================================================
 import numpy as np
 import matplotlib.pyplot as plt
+plt.rcParams.update({'font.size': 18})
 
 # ============================================================================
 # Classes
@@ -71,20 +72,6 @@ for key in O16.ESEM.keys():
 legend = [i+' [K]' for i in list(O16.ESEM.keys())]
 plt.legend(legend), plt.show()
 
-# U235 = isotope(M=235.044)
-# U235.load_data('Data/U235_ES.txt', 'ES', 300)
-# O16.load_data('O16_ES_600', 'ES', 600)
-# O16.load_data('O16_ES_900', 'ES', 900)
-# O16.load_data('O16_ES_1200', 'ES', 1200)
-# fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(12, 6))
-# for key in O16.ESEM.keys():
-#     x = O16.ESEM[key]
-#     y = O16.ESXS[key]
-#     ax.loglog(x, y)
-# legend = [i+' [K]' for i in list(O16.ESEM.keys())]
-# plt.legend(legend), plt.show()
-# U235.load_data('Data/U235_NG.txt', 'NG', 300)
-
 U238 = isotope(M=238.051)
 U238.load_data('Data/U238_ES.txt', 'ES', 300)
 U238.load_data('U238_ES_600', 'ES', 600)
@@ -100,8 +87,13 @@ ax.set_xlim(1, 12)
 plt.legend(legend), plt.show()
 U238.load_data('Data/U238_NG.txt', 'NG', 300)
     
-    
-    
+E, sigma_g = np.loadtxt('Data/U238_ES_0_BW.txt', unpack=True, delimiter=',')
+Emesh, y1 = np.loadtxt('Data/U238_ES_300_BW.txt', unpack=True, delimiter=',')
+Emesh, y2 = np.loadtxt('Data/U238_ES_600_BW.txt', unpack=True, delimiter=',')
+Emesh, y3 = np.loadtxt('Data/U238_ES_900_BW.txt', unpack=True, delimiter=',')
+fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
+ax.loglog(E, sigma_g, Emesh, y1, Emesh, y2, Emesh, y3), ax.set_xlim(1, 1000)
+plt.legend(['$Breit-Wigner\ \sigma_\gamma, T_2=0K$', '$T_2 = 300K$', '$T_2 = 600K$', '$T_2 = 900K$'])
     
     
     

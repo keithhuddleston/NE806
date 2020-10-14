@@ -43,6 +43,10 @@ def fwxs(E, X, Phi, GS):
 # ============================================================================
 # Classes
 # ============================================================================
+def unique(sequence):
+    seen = set()
+    return [x for x in sequence if not (x in seen or seen.add(x))]
+
 class isotope:
     def __init__(self, M):
         self.M = M # Atomic Mass
@@ -58,9 +62,9 @@ class isotope:
     
     def load_data(self, filename, file_content, temperature):
         EM, XS = np.loadtxt(filename, delimiter=',', unpack=True, skiprows=1)
-        if len(EM) != len(set(EM)):
-            XS = np.interp(list(set(EM)), EM, XS)
-            EM = np.array(list(set(EM)))
+        # if len(EM) != len(set(EM)):
+        #     XS = np.interp(unique(EM), EM, XS)
+        #     EM = unique(EM)
         if file_content == 'ES':
             self.ESXS[str(temperature)] = XS
             self.ESEM[str(temperature)] = EM
@@ -114,13 +118,13 @@ if Flag:
     #     np.savetxt('O16_ES_'+key, np.vstack(np.transpose([O16.ESEM[key], O16.ESXS[key]])), delimiter=',')
        
     # Doppler Broaden U238
-    for i in Temps:
-        E1 = U238.ESEM['300']
-        XS = U238.ESXS['300']
-        U238.ESXS[str(i)] = doppler(Emesh, E1, XS, 300, i, U238.M)
-        U238.ESEM[str(i)] = Emesh
-        for key in list(U238.ESEM.keys())[1:]:
-            np.savetxt('U238_ES_'+key, np.vstack(np.transpose([U238.ESEM[key], U238.ESXS[key]])), delimiter=',')
+    # for i in Temps:
+    #     E1 = U238.ESEM['300']
+    #     XS = U238.ESXS['300']
+    #     U238.ESXS[str(i)] = doppler(Emesh, E1, XS, 300, i, U238.M)
+    #     U238.ESEM[str(i)] = Emesh
+    #     for key in list(U238.ESEM.keys())[1:]:
+    #         np.savetxt('U238_ES_'+key, np.vstack(np.transpose([U238.ESEM[key], U238.ESXS[key]])), delimiter=',')
             
         # E1 = U238.NGEM['300']
         # XS = U238.NGXS['300']
@@ -154,9 +158,17 @@ if Flag:
 # for key in list(U235.NGEM.keys())[1:]:
 #     np.savetxt('U235_NG_'+key, np.vstack(np.transpose([U235.NGEM[key], U235.NGXS[key]])), delimiter=',')
 
-
-
-
+ind = np.zeros(len(U238.ESEM['300'])-len(set(U238.ESEM['300'])))
+if len(ind) > 0:
+    j = 0
+    for i in range(len(U238.ESEM['300'][:-1])):
+        if U238.ESEM['300'][i] == U238.ESEM['300'][i+1]:
+            ind[j] = i
+            j += 1
+            
+for i in ind:
+    i = int(i)
+    print(U238.ESXS['300'][i] - U238.ESXS['300'][i+1])
 
 
 
