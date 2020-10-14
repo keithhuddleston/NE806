@@ -62,9 +62,17 @@ class isotope:
     
     def load_data(self, filename, file_content, temperature):
         EM, XS = np.loadtxt(filename, delimiter=',', unpack=True, skiprows=1)
-        # if len(EM) != len(set(EM)):
-        #     XS = np.interp(unique(EM), EM, XS)
-        #     EM = unique(EM)
+        if len(EM) != len(set(EM)):
+            print('yolo')
+            ind = np.zeros(len(EM)-len(set(EM)), dtype=int)
+            if len(ind) > 0:
+                j = 0
+                for i in range(len(EM[:-1])):
+                    if EM[i] == EM[i+1]:
+                        ind[j] = i
+                        j += 1
+            EM = np.delete(EM, ind)
+            XS = np.delete(XS, ind)
         if file_content == 'ES':
             self.ESXS[str(temperature)] = XS
             self.ESEM[str(temperature)] = EM
@@ -118,18 +126,20 @@ if Flag:
     #     np.savetxt('O16_ES_'+key, np.vstack(np.transpose([O16.ESEM[key], O16.ESXS[key]])), delimiter=',')
        
     # Doppler Broaden U238
-    # for i in Temps:
-    #     E1 = U238.ESEM['300']
-    #     XS = U238.ESXS['300']
-    #     U238.ESXS[str(i)] = doppler(Emesh, E1, XS, 300, i, U238.M)
-    #     U238.ESEM[str(i)] = Emesh
-    #     for key in list(U238.ESEM.keys())[1:]:
-    #         np.savetxt('U238_ES_'+key, np.vstack(np.transpose([U238.ESEM[key], U238.ESXS[key]])), delimiter=',')
-            
-        # E1 = U238.NGEM['300']
-        # XS = U238.NGXS['300']
-        # U238.NGXS[str(i)] = doppler(Emesh, E1, XS, 300, i, U238.M)
-        # U238.NGEM[str(i)] = Emesh
+    for i in Temps:
+        # E1 = U238.ESEM['300']
+        # XS = U238.ESXS['300']
+        # U238.ESXS[str(i)] = doppler(Emesh, E1, XS, 300, i, U238.M)
+        # U238.ESEM[str(i)] = Emesh
+        # for key in list(U238.ESEM.keys())[1:]:
+        #     np.savetxt('U238_ES_'+key, np.vstack(np.transpose([U238.ESEM[key], U238.ESXS[key]])), delimiter=',')
+
+        E1 = U238.NGEM['300']
+        XS = U238.NGXS['300']
+        U238.NGXS[str(i)] = doppler(Emesh, E1, XS, 300, i, U238.M)
+        U238.NGEM[str(i)] = Emesh
+        for key in list(U238.NGEM.keys())[1:]:
+            np.savetxt('U238_NG_'+key, np.vstack(np.transpose([U238.NGEM[key], U238.NGXS[key]])), delimiter=',')
 
 #     # Doppler Broaden U235
 #     for i in Temps:
