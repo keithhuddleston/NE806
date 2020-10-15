@@ -45,6 +45,8 @@ class isotope:
 # ============================================================================
 # Load interpreted plotted data files from BNL website
 # ============================================================================
+
+# Plot H1 elastic scattering cross section library and Doppler Broadened
 H1 = isotope(M=1.008)
 H1.load_data('Data/H1_ES.txt', 'ES', 300)
 H1.load_data('H1_ES_600', 'ES', 600)
@@ -57,8 +59,9 @@ for key in H1.ESEM.keys():
     ax.loglog(x, y)
 plt.xlabel('Energy [eV]'), plt.ylabel('Cross Section [Barns]')
 legend = [i+' [K]' for i in list(H1.ESEM.keys())]
-plt.legend(legend), plt.title('H1 Elastic Scatter'), plt.show()
+plt.legend(legend, loc=3), plt.title('H1 Elastic Scatter'), plt.show()
 
+# Plot O16 elastic scattering cross section library and Doppler Broadened
 O16 = isotope(M=15.995)
 O16.load_data('Data/O16_ES.txt', 'ES', 300)
 O16.load_data('O16_ES_600', 'ES', 600)
@@ -71,8 +74,9 @@ for key in O16.ESEM.keys():
     ax.loglog(x, y)
 legend = [i+' [K]' for i in list(O16.ESEM.keys())]
 plt.xlabel('Energy [eV]'), plt.ylabel('Cross Section [Barns]')
-plt.legend(legend), plt.title('O16 Elastic Scatter'), plt.show()
+plt.legend(legend, loc=3), plt.title('O16 Elastic Scatter'), plt.show()
 
+# Plot U238 elastic scattering cross section library and Doppler Broadened
 U238 = isotope(M=238.051)
 U238.load_data('Data/U238_ES.txt', 'ES', 300)
 U238.load_data('U238_ES_600', 'ES', 600)
@@ -85,20 +89,57 @@ for key in U238.ESEM.keys():
     ax.loglog(x, y)
 legend = [i+' [K]' for i in list(U238.ESEM.keys())]
 plt.xlabel('Energy [eV]'), plt.ylabel('Cross Section [Barns]')
-plt.legend(legend), plt.title('U238 Elastic Scatter'), plt.show()
+plt.legend(legend, loc=3), plt.title('U238  Elastic Scatter'), plt.show()
+
+# Plot U238 radiative capture cross section library and Doppler Broadened
 U238.load_data('Data/U238_NG.txt', 'NG', 300)
-
-E, sigma_g = np.loadtxt('Data/U238_NG_0_BW.txt', unpack=True, delimiter=',')
-Emesh, y1 = np.loadtxt('Data/U238_NG_300_BW.txt', unpack=True, delimiter=',')
-Emesh, y2 = np.loadtxt('Data/U238_NG_600_BW.txt', unpack=True, delimiter=',')
-Emesh, y3 = np.loadtxt('Data/U238_NG_900_BW.txt', unpack=True, delimiter=',')
+U238.load_data('U238_NG_600', 'NG', 600)
+U238.load_data('U238_NG_900', 'NG', 900)
+U238.load_data('U238_NG_1200', 'NG', 1200)
 fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
-ax.loglog(E, sigma_g, Emesh, y1, Emesh, y2, Emesh, y3), plt.xlim(0.1, 1000)
+for key in U238.NGEM.keys():
+    x = U238.NGEM[key]
+    y = U238.NGXS[key]
+    ax.loglog(x, y)
+legend = [i+' [K]' for i in list(U238.NGEM.keys())]
 plt.xlabel('Energy [eV]'), plt.ylabel('Cross Section [Barns]')
-plt.legend(['$Breit-Wigner\ \sigma_\gamma, T_2=0K$', '$T_2 = 300K$', '$T_2 = 600K$', '$T_2 = 900K$'])
-plt.show()
+plt.legend(legend, loc=3), plt.title('U238 Radiative Capture'), plt.show()
 
-# fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
+# Plot U235 elastic scattering cross section library and Doppler Broadened
+U235 = isotope(M=235.044)
+U235.load_data('Data/U235_ES.txt', 'ES', 300)
+U235.load_data('U235_ES_600', 'ES', 600)
+U235.load_data('U235_ES_900', 'ES', 900)
+U235.load_data('U235_ES_1200', 'ES', 1200)
+fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
+for key in U235.ESEM.keys():
+    x = U235.ESEM[key]
+    y = U235.ESXS[key]
+    ax.loglog(x, y)
+legend = [i+' [K]' for i in list(U235.ESEM.keys())]
+plt.xlabel('Energy [eV]'), plt.ylabel('Cross Section [Barns]')
+plt.legend(legend, loc=3), plt.title('U235 Elastic Scatter'), plt.show()
+
+# Plot U235 radiative Capture cross section library and Doppler Broadened
+U235 = isotope(M=235.044)
+U235.load_data('Data/U235_NG.txt', 'NG', 300)
+U235.load_data('U235_NG_600', 'NG', 600)
+U235.load_data('U235_NG_900', 'NG', 900)
+U235.load_data('U235_NG_1200', 'NG', 1200)
+fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
+for key in U235.NGEM.keys():
+    x = U235.NGEM[key]
+    y = U235.NGXS[key]
+    ax.loglog(x, y)
+legend = [i+' [K]' for i in list(U235.NGEM.keys())]
+plt.xlabel('Energy [eV]'), plt.ylabel('Cross Section [Barns]')
+plt.legend(legend, loc=3), plt.title('U235 Radiative Capture'), plt.show()
+
+# Compare BNL cross section data to BW DB cross section at 300
+Emesh, y1 = np.loadtxt('Data/U238_NG_300_BW.txt', unpack=True, delimiter=',')
+fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
+ax.loglog(Emesh, y1, U238.NGEM['300'], U238.NGXS['300']), plt.xlim(5, 12)
+plt.legend(['$Breit-Wigner\ \sigma_\gamma$', '$BNL\ Interpreted\ Plot\ \sigma_\gamma$'], loc=3)
     
     
     

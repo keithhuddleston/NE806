@@ -84,8 +84,8 @@ class isotope:
 # Testing Oct 12. 2020
 # ============================================================================
 
-# Load and Doppler Broaden data here
-Flag = True
+# Note this takes forever to run, was used to create text files
+Flag = False
 if Flag:
     Temps = [600, 900, 1200] # Temperature values specified in HW
     
@@ -107,33 +107,31 @@ if Flag:
     Emesh = np.logspace(-5, 7, 75000)
     
     # # Doppler Broaden H1
-    # for i in Temps:
-    #     E1 = H1.ESEM['300']
-    #     XS = H1.ESXS['300']
-    #     H1.ESXS[str(i)] = doppler(Emesh, E1, XS, 300, i, H1.M)
-    #     H1.ESEM[str(i)] = Emesh
-        
-    # for key in list(H1.ESEM.keys())[1:]:
-    #     np.savetxt('H1_ES_'+key, np.vstack(np.transpose([H1.ESEM[key], H1.ESXS[key]])), delimiter=',')
+    for i in Temps:
+        E1 = H1.ESEM['300']
+        XS = H1.ESXS['300']
+        H1.ESXS[str(i)] = doppler(Emesh, E1, XS, 300, i, H1.M)
+        H1.ESEM[str(i)] = Emesh
+    for key in list(H1.ESEM.keys())[1:]:
+        np.savetxt('H1_ES_'+key, np.vstack(np.transpose([H1.ESEM[key], H1.ESXS[key]])), delimiter=',')
     
-    # # Doppler Broaden O16
-    # for i in Temps:
-    #     E1 = O16.ESEM['300']
-    #     XS = O16.ESXS['300']
-    #     O16.ESXS[str(i)] = doppler(Emesh, E1, XS, 300, i, O16.M)
-    #     O16.ESEM[str(i)] = Emesh
-    # for key in list(O16.ESEM.keys())[1:]:
-    #     np.savetxt('O16_ES_'+key, np.vstack(np.transpose([O16.ESEM[key], O16.ESXS[key]])), delimiter=',')
+    # Doppler Broaden O16
+    for i in Temps:
+        E1 = O16.ESEM['300']
+        XS = O16.ESXS['300']
+        O16.ESXS[str(i)] = doppler(Emesh, E1, XS, 300, i, O16.M)
+        O16.ESEM[str(i)] = Emesh
+    for key in list(O16.ESEM.keys())[1:]:
+        np.savetxt('O16_ES_'+key, np.vstack(np.transpose([O16.ESEM[key], O16.ESXS[key]])), delimiter=',')
        
     # Doppler Broaden U238
     for i in Temps:
-        # E1 = U238.ESEM['300']
-        # XS = U238.ESXS['300']
-        # U238.ESXS[str(i)] = doppler(Emesh, E1, XS, 300, i, U238.M)
-        # U238.ESEM[str(i)] = Emesh
-        # for key in list(U238.ESEM.keys())[1:]:
-        #     np.savetxt('U238_ES_'+key, np.vstack(np.transpose([U238.ESEM[key], U238.ESXS[key]])), delimiter=',')
-
+        E1 = U238.ESEM['300']
+        XS = U238.ESXS['300']
+        U238.ESXS[str(i)] = doppler(Emesh, E1, XS, 300, i, U238.M)
+        U238.ESEM[str(i)] = Emesh
+        for key in list(U238.ESEM.keys())[1:]:
+            np.savetxt('U238_ES_'+key, np.vstack(np.transpose([U238.ESEM[key], U238.ESXS[key]])), delimiter=',')
         E1 = U238.NGEM['300']
         XS = U238.NGXS['300']
         U238.NGXS[str(i)] = doppler(Emesh, E1, XS, 300, i, U238.M)
@@ -141,60 +139,17 @@ if Flag:
         for key in list(U238.NGEM.keys())[1:]:
             np.savetxt('U238_NG_'+key, np.vstack(np.transpose([U238.NGEM[key], U238.NGXS[key]])), delimiter=',')
 
-#     # Doppler Broaden U235
-#     for i in Temps:
-#         E1 = U235.ESEM['300']
-#         XS = U235.ESXS['300']
-#         U235.ESXS[str(i)] = doppler(Emesh, E1, XS, 300, i, U235.M)
-#         U235.ESEM[str(i)] = Emesh
-        
-#         E1 = U235.NGEM['300']
-#         XS = U235.NGXS['300']
-#         U235.NGXS[str(i)] = doppler(Emesh, E1, XS, 300, i, U235.M)
-#         U235.NGEM[str(i)] = Emesh
-
-
-
-
-    
-
-    
-# for key in list(U238.NGEM.keys())[1:]:
-#     np.savetxt('U238_NG_'+key, np.vstack(np.transpose([U238.NGEM[key], U238.NGXS[key]])), delimiter=',')
-
-# for key in list(U235.ESEM.keys())[1:]:
-#     np.savetxt('U235_ES_'+key, np.vstack(np.transpose([U235.ESEM[key], U235.ESXS[key]])), delimiter=',')
-    
-# for key in list(U235.NGEM.keys())[1:]:
-#     np.savetxt('U235_NG_'+key, np.vstack(np.transpose([U235.NGEM[key], U235.NGXS[key]])), delimiter=',')
-
-ind = np.zeros(len(U238.ESEM['300'])-len(set(U238.ESEM['300'])))
-if len(ind) > 0:
-    j = 0
-    for i in range(len(U238.ESEM['300'][:-1])):
-        if U238.ESEM['300'][i] == U238.ESEM['300'][i+1]:
-            ind[j] = i
-            j += 1
-            
-for i in ind:
-    i = int(i)
-    print(U238.ESXS['300'][i] - U238.ESXS['300'][i+1])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # Doppler Broaden U235
+    for i in Temps:
+        E1 = U235.ESEM['300']
+        XS = U235.ESXS['300']
+        U235.ESXS[str(i)] = doppler(Emesh, E1, XS, 300, i, U235.M)
+        U235.ESEM[str(i)] = Emesh
+        for key in list(U235.ESEM.keys())[1:]:
+            np.savetxt('U235_ES_'+key, np.vstack(np.transpose([U235.ESEM[key], U235.ESXS[key]])), delimiter=',')        
+        E1 = U235.NGEM['300']
+        XS = U235.NGXS['300']
+        U235.NGXS[str(i)] = doppler(Emesh, E1, XS, 300, i, U235.M)
+        U235.NGEM[str(i)] = Emesh
+        for key in list(U235.NGEM.keys())[1:]:
+            np.savetxt('U235_NG_'+key, np.vstack(np.transpose([U235.NGEM[key], U235.NGXS[key]])), delimiter=',')        
