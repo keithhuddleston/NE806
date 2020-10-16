@@ -7,9 +7,9 @@ import sympy as sp
 import matplotlib.pyplot as plt
 
 #  Bring in cross section data ===============================================
-E1, U238_ng = np.loadtxt('Data/U238ng.txt', skiprows=1, unpack=True, delimiter=',')
-E2, U238_es = np.loadtxt('Data/U238es.txt', skiprows=17, unpack=True, delimiter=',')
-E3, H1_es = np.loadtxt('Data/H1es.txt', skiprows=1, unpack=True, delimiter=',')
+E1, U238_ng = np.loadtxt('Data/U238_NG.txt', skiprows=1, unpack=True, delimiter=',')
+E2, U238_es = np.loadtxt('Data/U238_NG.txt', skiprows=17, unpack=True, delimiter=',')
+E3, H1_es = np.loadtxt('Data/H1_ES.txt', skiprows=1, unpack=True, delimiter=',')
 
 Emesh = np.linspace(0.1, 50, 1000)
 U238_ng = np.interp(Emesh, E1, U238_ng)
