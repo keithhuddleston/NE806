@@ -24,23 +24,6 @@ c16 = np.array([1.00e1 , 8.21e-1, 5.53e-3, 4.00e-6, 1.30e-6, 1.15e-6, 1.097e-6,
                 5.80e-8, 3.00e-8, 1.00e-11])*1e6 # eV
 c16 = c16[::-1]
 
-def fwxs(E, X, Phi, GS):
-    """
-    Input:
-          E, energy mesh of X and Phi
-          X, Cross section data
-          Phi, flux
-          GS, specified group structure
-    Output:
-          GX,
-    """
-    # assert len(E) == len(X) == len(Phi), 'Length of input must be the same'
-    # Step 1 add e values of GS to E
-    # Step 2 interpolate values for new Es
-    # Step 3 perform integral
-    plt.loglog(E, X)
-    plt.vlines(GS, min(X), max(X), linestyle='--'), plt.show()
-
 # ============================================================================
 # Classes
 # ============================================================================
@@ -83,124 +66,132 @@ class isotope:
 # ============================================================================
 # Load Data
 # ============================================================================
-def phinr(sd, st, E):
-    return 1 / (E*(st+sd))
 
-def phiwr(sd, sa, E):
-    return 1 / (E*(sa+sd))
+# Narrow Resonance Flux Approximation
+def phinr(sigma_t, sigma_o, E):
+    return 1 / (E*(sigma_t + sigma_o))
 
+# Wide Resonance Flux Approximation
+def phiwr(sigma_a, sigma_o, E):
+    return 1 / (E*(sigma_a + sigma_o))
+
+# Microscopic Flux Weighted Average Cross Section
+def sigma_g(Phi, XS, Emesh, Group_Structure):
+    Phi_1 = Phi[:-1]
+    Phi_2 = Phi[1:]
+    XS_1 = XS[:-1]
+    XS_2 = XS[1:]
+    E_1 = Emesh[:-1]
+    E_2 = Emesh[1:]
+    
+    A = (E_2*Phi_1 - E_1*Phi_2)/(E_2 - E_1)
+    B = (Phi_2 - Phi_1)/(E_2-E_1)
+    E = E_2 - E_1
+    den = sum(A*E + (B/2)*E**2)
+    
+    C = (E_2*XS_1 - E_1*XS_2)/(E_2 - E_1)
+    D = (XS_2 - XS_1)/(E_2-E_1)
+    num = (A*C*E) + (A*D*E**2)/2 + (C*B*E**2)/2 + (B*D*E**3)/3
+    return num/den
+    
+# Microscopic Background Cross Section
 sd = [1e1, 1e2, 1e3, 1e4, 1e5]
 
 Flag = True
 if Flag:
+    # Note, this block of text won't run unless Doppler Broadening was done
+    
+    # Load H1 Elastic Scattering Data
     H1 = isotope(M=1.008)
     H1.load_data('Data/H1_ES.txt', 'ES', 300)
     H1.load_data('H1_ES_600', 'ES', 600)
     H1.load_data('H1_ES_900', 'ES', 900)
     H1.load_data('H1_ES_1200', 'ES', 1200)
+    
+    # Load O16 Elastic Scattering Data
     O16 = isotope(M=15.995)
     O16.load_data('Data/O16_ES.txt', 'ES', 300)
     O16.load_data('O16_ES_600', 'ES', 600)
     O16.load_data('O16_ES_900', 'ES', 900)
     O16.load_data('O16_ES_1200', 'ES', 1200)
+    
+    # Load U238 Elastic Scattering Data
     U238 = isotope(M=238.051)
     U238.load_data('Data/U238_ES.txt', 'ES', 300)
     U238.load_data('U238_ES_600', 'ES', 600)
     U238.load_data('U238_ES_900', 'ES', 900)
     U238.load_data('U238_ES_1200', 'ES', 1200)
+    
+    # Load U238 Radiative Capture Data
     U238.load_data('Data/U238_NG.txt', 'NG', 300)
     U238.load_data('U238_NG_600', 'NG', 600)
     U238.load_data('U238_NG_900', 'NG', 900)
     U238.load_data('U238_NG_1200', 'NG', 1200)
+    
+    # Load U235 Elastic Scattering Data
     U235 = isotope(M=235.044)
     U235.load_data('Data/U235_ES.txt', 'ES', 300)
     U235.load_data('U235_ES_600', 'ES', 600)
     U235.load_data('U235_ES_900', 'ES', 900)
     U235.load_data('U235_ES_1200', 'ES', 1200)
+    
+    # Load U235 Radiative Capture
     U235.load_data('Data/U235_NG.txt', 'NG', 300)
     U235.load_data('U235_NG_600', 'NG', 600)
     U235.load_data('U235_NG_900', 'NG', 900)
     U235.load_data('U235_NG_1200', 'NG', 1200)
-
-    Emesh = U238.ESEM['600']
-    sigma_a = U238.NGXS['600'] + U235.NGXS['600']
-    sigma_t = sigma_a + U238.ESXS['600'] + U235.ESXS['600']
-
-    x = Emesh
-    y1 = phinr(sd[0], sigma_a, Emesh)
-    y2 = phiwr(sd[0], sigma_a, Emesh)
-    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
-    ax.loglog(x, y1, x, y2)
-    plt.xlabel('Energy [eV]'), plt.ylabel('Flux'), plt.show()
-    phi = y1
     
-    x = Emesh
-    y = U238.ESXS['600']
-    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
-    ax.loglog(x, y)
-    plt.xlabel('Energy [eV]'), plt.ylabel('Cross Section [Barns]')
-    xs = y
-    
-    def sigma_g(Phi, XS, Emesh, Group_Structure):
-        Phi_1 = Phi[:-1]
-        Phi_2 = Phi[1:]
-        XS_1 = XS[:-1]
-        XS_2 = XS[1:]
-        E_1 = Emesh[:-1]
-        E_2 = Emesh[1:]
+def make_group(Emesh, phi=None, xs=None, group_structure=c16):
+    ind_G = np.zeros(len(c16), dtype=int)
+    k = 0
+    for i in range(len(Emesh)):
+        if Emesh[i] > c16[k]:
+            ind_G[k] = int(i)
+            k += 1
+    if ind_G[-1] == 0:
+        ind_G[-1] = len(Emesh)
         
-        A = (E_2*Phi_1 - E_1*Phi_2)/(E_2 - E_1)
-        B = (Phi_2 - Phi_1)/(E_2-E_1)
-        E = E_2 - E_1
-        den = sum(A*E + (B/2)*E**2)
-        
-        C = (E_2*XS_1 - E_1*XS_2)/(E_2 - E_1)
-        D = (XS_2 - XS_1)/(E_2-E_1)
-        num = (A*C*E) + (A*D*E**2)/2 + (C*B*E**2)/2 + (B*D*E**3)/3
-        return sum(num/den)
-    
-a = sigma_g(phi, xs, Emesh, c16)
-ind_G = np.zeros(len(c16), dtype=int)
-k = 0
-for i in range(len(Emesh)):
-    if Emesh[i] > c16[k]:
-        ind_G[k] = int(i)
-        k += 1
-if ind_G[-1] == 0:
-    ind_G[-1] = len(Emesh)
-    
-group_e = []
-group_s = []
-group_p = []
-c16_s = np.interp(c16, Emesh, xs)
-c16_p = np.interp(c16, Emesh, phi)
-for i in range(len(ind_G[:-1])):
-    L1 = [c16[i]] + list(Emesh[ind_G[i]:ind_G[i+1]]) + [c16[i+1]]
-    L2 = [c16_s[i]] + list(xs[ind_G[i]:ind_G[i+1]]) + [c16_s[i+1]]
-    L3 = [c16_p[i]] + list(phi[ind_G[i]:ind_G[i+1]]) + [c16_p[i+1]]
-    group_e.append(np.array(L1))
-    group_s.append(np.array(L2))
-    group_p.append(np.array(L3))
-if group_e[-1][-1] == group_e[-1][-2]:
-    group_e[-1] = group_e[-1][:-1]
-    group_s[-1] = group_s[-1][:-1]
-    group_p[-1] = group_p[-1][:-1]
-    
-fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
-for i in range(len(group_e)):
-    ax.loglog(group_e[i], group_s[i])
-    ax.axvline(c16[i], ls='--', c='k')
-plt.plot()
+Emesh   = U238.ESEM['600']
+sigma_a = U238.NGXS['600']
+xs      = U238.ESXS['600']
+sigma_e = U238.ESXS['600']
+make_group(Emesh)
 
-fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
-for i in range(len(group_e)):
-    ax.loglog(group_e[i], group_p[i])
-    ax.axvline(c16[i], ls='--', c='k')
-plt.plot()
+# phi = phinr(sd[0], sigma_a, Emesh)
+# # Created nested lists which correspond to the values of interest in a group
+# group_e = [] # Energy Values of group
+# group_s = [] # Cross section values of group
+# group_p = [] # flux values of group
+# c16_s = np.interp(c16, Emesh, xs) # Interpolate boundary values
+# c16_p = np.interp(c16, Emesh, phi) # Interpolate boundary values
+# for i in range(len(ind_G[:-1])):
+#     L1 = [c16[i]] + list(Emesh[ind_G[i]:ind_G[i+1]]) + [c16[i+1]]
+#     L2 = [c16_s[i]] + list(xs[ind_G[i]:ind_G[i+1]]) + [c16_s[i+1]]
+#     L3 = [c16_p[i]] + list(phi[ind_G[i]:ind_G[i+1]]) + [c16_p[i+1]]
+#     group_e.append(np.array(L1))
+#     group_s.append(np.array(L2))
+#     group_p.append(np.array(L3))
+# if group_e[-1][-1] == group_e[-1][-2]:
+#     group_e[-1] = group_e[-1][:-1]
+#     group_s[-1] = group_s[-1][:-1]
+#     group_p[-1] = group_p[-1][:-1]
+    
+# fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
+# for i in range(len(group_e)):
+#     ax.loglog(group_e[i], group_s[i])
+#     ax.axvline(c16[i], ls='--', c='k')
+# plt.plot()
 
-sg = np.zeros(len(group_e))
-for i in range(len(sg)):
-    sg[i] = sigma_g(group_p[i], group_s[i], group_e[i], c16)
+# fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
+# for i in range(len(group_e)):
+#     ax.loglog(group_e[i], group_p[i])
+#     ax.axvline(c16[i], ls='--', c='k')
+# plt.plot()
+
+
+# sg = np.zeros(len(group_e))
+# for i in range(len(sg)):
+#     sg[i] = sigma_g(group_p[i], group_s[i], group_e[i], c16)
 # ============================================================================
 # Make Text Files here
 # ============================================================================
