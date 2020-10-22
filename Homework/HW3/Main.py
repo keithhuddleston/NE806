@@ -85,14 +85,14 @@ def sigma_g(Phi, XS, Emesh, Group_Structure):
     E_2 = Emesh[1:]
     
     A = (E_2*Phi_1 - E_1*Phi_2)/(E_2 - E_1)
-    B = (Phi_2 - Phi_1)/(E_2-E_1)
+    B = (Phi_2 - Phi_1)/(E_2 - E_1)
     E = E_2 - E_1
-    den = sum(A*E + (B/2)*E**2)
+    den = A*E + (B/2)*E**2
     
     C = (E_2*XS_1 - E_1*XS_2)/(E_2 - E_1)
     D = (XS_2 - XS_1)/(E_2-E_1)
     num = (A*C*E) + (A*D*E**2)/2 + (C*B*E**2)/2 + (B*D*E**3)/3
-    return num/den
+    return sum(num/den)
     
 # Microscopic Background Cross Section
 sd = [1e1, 1e2, 1e3, 1e4, 1e5]
@@ -141,8 +141,8 @@ if Flag:
     U235.load_data('U235_NG_900', 'NG', 900)
     U235.load_data('U235_NG_1200', 'NG', 1200)
     
-def make_group(Emesh, phi=None, xs=None, group_structure=c16):
-    ind_G = np.zeros(len(c16), dtype=int)
+def make_group(Emesh, phi, xs, group_structure):
+    ind_G = np.zeros(len(group_structure), dtype=int)
     k = 0
     for i in range(len(Emesh)):
         if Emesh[i] > c16[k]:
@@ -150,48 +150,56 @@ def make_group(Emesh, phi=None, xs=None, group_structure=c16):
             k += 1
     if ind_G[-1] == 0:
         ind_G[-1] = len(Emesh)
-        
+
+    group_e = [] # Group-wise energy values
+    group_s = [] # Group-wise cross section values
+    group_p = [] # Group-wise flux values
+    
+    c16_s = np.interp(c16, Emesh, xs)  # Interpolate boundary values
+    c16_p = np.interp(c16, Emesh, phi) # Interpolate boundary values
+    
+    for i in range(len(ind_G[:-1])):
+        L1 = [c16[i]] + list(Emesh[ind_G[i]:ind_G[i+1]]) + [c16[i+1]]
+        L2 = [c16_s[i]] + list(xs[ind_G[i]:ind_G[i+1]]) + [c16_s[i+1]]
+        L3 = [c16_p[i]] + list(phi[ind_G[i]:ind_G[i+1]]) + [c16_p[i+1]]
+        group_e.append(np.array(L1))
+        group_s.append(np.array(L2))
+        group_p.append(np.array(L3))
+    if group_e[-1][-1] == group_e[-1][-2]:
+        group_e[-1] = group_e[-1][:-1]
+        group_s[-1] = group_s[-1][:-1]
+        group_p[-1] = group_p[-1][:-1]
+    return group_e, group_s, group_p
+
 Emesh   = U238.ESEM['600']
 sigma_a = U238.NGXS['600']
 xs      = U238.ESXS['600']
 sigma_e = U238.ESXS['600']
-make_group(Emesh)
+phi     = phinr(sigma_a+sigma_e, sd[0], Emesh)
+e, s, p = make_group(Emesh, phi, xs, c16)
 
-# phi = phinr(sd[0], sigma_a, Emesh)
-# # Created nested lists which correspond to the values of interest in a group
-# group_e = [] # Energy Values of group
-# group_s = [] # Cross section values of group
-# group_p = [] # flux values of group
-# c16_s = np.interp(c16, Emesh, xs) # Interpolate boundary values
-# c16_p = np.interp(c16, Emesh, phi) # Interpolate boundary values
-# for i in range(len(ind_G[:-1])):
-#     L1 = [c16[i]] + list(Emesh[ind_G[i]:ind_G[i+1]]) + [c16[i+1]]
-#     L2 = [c16_s[i]] + list(xs[ind_G[i]:ind_G[i+1]]) + [c16_s[i+1]]
-#     L3 = [c16_p[i]] + list(phi[ind_G[i]:ind_G[i+1]]) + [c16_p[i+1]]
-#     group_e.append(np.array(L1))
-#     group_s.append(np.array(L2))
-#     group_p.append(np.array(L3))
-# if group_e[-1][-1] == group_e[-1][-2]:
-#     group_e[-1] = group_e[-1][:-1]
-#     group_s[-1] = group_s[-1][:-1]
-#     group_p[-1] = group_p[-1][:-1]
-    
-# fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
-# for i in range(len(group_e)):
-#     ax.loglog(group_e[i], group_s[i])
-#     ax.axvline(c16[i], ls='--', c='k')
-# plt.plot()
+sg = np.zeros(len(e))
 
-# fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
-# for i in range(len(group_e)):
-#     ax.loglog(group_e[i], group_p[i])
-#     ax.axvline(c16[i], ls='--', c='k')
-# plt.plot()
+for i in range(len(sg)):
+    sg[i] = sigma_g(p[i], s[i], e[i], c16)
+# Plot Results
+fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
+for i in range(len(e)):
+    ax.loglog(e[i], s[i])
+    ax.axvline(c16[i], ls='--', c='k')
+plt.plot()  
+fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
+for i in range(len(e)):
+    ax.loglog(e[i], p[i])
+    ax.axvline(c16[i], ls='--', c='k')
+plt.plot()
 
+fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
+ax.set_xscale( "log" )
+ax.set_yscale( "log" )
+for i in range(len(sg)):
+    ax.fill_between(e[i], sg[i])
 
-# sg = np.zeros(len(group_e))
-# for i in range(len(sg)):
-#     sg[i] = sigma_g(group_p[i], group_s[i], group_e[i], c16)
 # ============================================================================
 # Make Text Files here
 # ============================================================================
