@@ -278,10 +278,10 @@ if Flag:
     U235.load_data('U235_NG_900', 'NG', 900)
     U235.load_data('U235_NG_1200', 'NG', 1200)
     
-    Emesh   = U238.ESEM['600']
-    sigma_a = U238.NGXS['600']
-    xs      = U238.ESXS['600']
-    sigma_e = U238.ESXS['600']
+    Emesh   = U235.ESEM['600']
+    sigma_a = U235.NGXS['600']
+    xs      = U235.NGXS['600']
+    sigma_e = U235.ESXS['600']
     phi     = phinr(sigma_a+sigma_e, sd[0], Emesh)
     e, s, p = make_group(Emesh, phi, xs, c16)
     
@@ -293,11 +293,6 @@ if Flag:
     # Plot Results
     fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
     for i in range(len(e)):
-        ax.loglog(e[i], s[i])
-        ax.axvline(c16[i], ls='--', c='k')
-    plt.plot()  
-    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
-    for i in range(len(e)):
         ax.loglog(e[i], p[i])
         ax.axvline(c16[i], ls='--', c='k')
     plt.plot()
@@ -305,9 +300,10 @@ if Flag:
     fig, ax1 = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
     ax1.set_xscale( "log" )
     ax1.set_yscale( "log" )
-    ax2 = ax1.twinx()
+    # ax2 = ax1.twinx()
     for i in range(len(sg)):
         ax1.fill_between(e[i], sg[i])
         ax1.loglog(e[i], s[i], color='black', linestyle='--')
         # ax1.loglog(e[i], p[i], color='black')
     # ax1.loglog(e[-3], s[-1], color='black', linestyle='--', maker='o')
+
