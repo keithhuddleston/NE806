@@ -12,34 +12,9 @@ from scipy.special import erf
 import re
 
 # ============================================================================
-# Doppler Broadening Equations
+# Doppler-Broaden Function
 # ============================================================================
-F0 = lambda a: erf(a)
-H0 = lambda a, b: F0(a) - F0(b)
-
-F1 = lambda a: np.sqrt(1/np.pi) * (1-np.exp(-a**2))
-H1 = lambda a, b: F1(a) - F1(b)
-
-F2 = lambda a: (1/2)*erf(a) - (a/np.sqrt(np.pi))*np.exp(-a**2)
-H2 = lambda a, b: F2(a) - F2(b)
-
-F3 = lambda a: np.sqrt(1/np.pi) * (1-(1+a**2)*np.exp(-a**2))
-H3 = lambda a, b: F3(a) - F3(b)
-
-F4 = lambda a: (3/4)*erf(a) - np.sqrt(1/np.pi)*((3*a/2)+a**3)*np.exp(-a**2)
-H4 = lambda a, b: F4(a) - F4(b)
-
-def Akf(E1, E2, S1, S2):
-    den = (E2 - E1)
-    num = (E2*S1) - (E1*S2)
-    return num/den
-
-def Ckf(E1, E2, S1, S2, alpha):
-    den = (E2 - E1)*alpha
-    num = (S2 - S1)
-    return num/den
-
-def doppler(E2, E1, S1, T1, T2, M, m=1.009):
+def Doppler(E2, E1, S1, T1, T2, M, m=1.009):
     """
 
     Parameters
@@ -73,6 +48,31 @@ def doppler(E2, E1, S1, T1, T2, M, m=1.009):
     S2_pos = np.zeros(len(E2))
     S2_neg = np.zeros(len(E2))
     
+    F0 = lambda a: erf(a)
+    H0 = lambda a, b: F0(a) - F0(b)
+    
+    F1 = lambda a: np.sqrt(1/np.pi) * (1-np.exp(-a**2))
+    H1 = lambda a, b: F1(a) - F1(b)
+    
+    F2 = lambda a: (1/2)*erf(a) - (a/np.sqrt(np.pi))*np.exp(-a**2)
+    H2 = lambda a, b: F2(a) - F2(b)
+    
+    F3 = lambda a: np.sqrt(1/np.pi) * (1-(1+a**2)*np.exp(-a**2))
+    H3 = lambda a, b: F3(a) - F3(b)
+    
+    F4 = lambda a: (3/4)*erf(a) - np.sqrt(1/np.pi)*((3*a/2)+a**3)*np.exp(-a**2)
+    H4 = lambda a, b: F4(a) - F4(b)
+    
+    def Af(E1, E2, S1, S2):
+        den = (E2 - E1)
+        num = (E2*S1) - (E1*S2)
+        return num/den
+    
+    def Cf(E1, E2, S1, S2, alpha):
+        den = (E2 - E1)*alpha
+        num = (S2 - S1)
+        return num/den
+    
     # Evaluate Doppler-broadened cross section at specified energy E2[i]
     for i in range(len(E2)):
         S2i = 0
@@ -85,8 +85,8 @@ def doppler(E2, E1, S1, T1, T2, M, m=1.009):
             xk1 = np.sqrt(alpha*Ek1)
             xk2 = np.sqrt(alpha*Ek2)
 
-            Ak = Akf(Ek1, Ek2, Sk1, Sk2)
-            Ck = Ckf(Ek1, Ek2, Sk1, Sk2, alpha)
+            Ak = Af(Ek1, Ek2, Sk1, Sk2)
+            Ck = Cf(Ek1, Ek2, Sk1, Sk2, alpha)
 
             Zk1 = xk1 - y[j]
             Zk2 = xk2 - y[j]
@@ -182,7 +182,8 @@ def alpha(A):
 
 def scatter_probability(E_i, E_j, alpha) :
     p = (1.0/E_j/(1.0-alpha)) * 1.0*((E_i >= alpha*E_j))
-    return p 
+    return p
+
 def compute_spectrum(E, Sigma_t, Sigma_s, N, alpha) :
     N_E = len(E)
     phi = np.zeros(N_E)
@@ -191,7 +192,46 @@ def compute_spectrum(E, Sigma_t, Sigma_s, N, alpha) :
         Q_i = 0.0
         for j in range(N_E-1, i, -1) :
             dE = E[j] - E[j-1]
-            E_bar = np.sqrt(E[j]*E[j-1])
             Q_i += phi[j] * (Sigma_s[j]*N) * scatter_probability(E[i], E[j], alpha) * dE
         phi[i] = Q_i / Sigma_t[i]
     return phi
+
+# ============================================================================
+# Phi
+# ============================================================================
+class Nuclide_Data:
+    def __init__(self, M, Resonator):
+        self.M = M # Atomic Mass
+        
+        self.ESXS = {}  # Elastic Scattering Cross Section
+        self.ESEM = {}  # Elastic Scattering Energy Mesh
+        self.NGXS = {}  # Radiative Capture Cross Section
+        self.NGEM = {}  # Radiative Capture Energy Mesh
+        
+        self.Temps = []
+        self.Resonator = Resonator
+        return
+    
+    def load_data(self, filename, file_content, temperature):
+        EM, XS = np.loadtxt(filename, delimiter=',', unpack=True, skiprows=1)
+        if len(EM) != len(set(EM)):
+            ind = np.zeros(len(EM)-len(set(EM)), dtype=int)
+            if len(ind) > 0:
+                j = 0
+                for i in range(len(EM[:-1])):
+                    if EM[i] == EM[i+1]:
+                        ind[j] = i
+                        j += 1
+            EM = np.delete(EM, ind)
+            XS = np.delete(XS, ind)
+        if file_content == 'ES':
+            self.ESXS[str(temperature)] = XS
+            self.ESEM[str(temperature)] = EM
+            if not self.Resonator:
+                self.NGXS[str(temperature)] = np.zeros(len(XS))
+                self.NGEM[str(temperature)] = EM
+        elif file_content == 'NG':
+            self.NGXS[str(temperature)] = XS
+            self.NGEM[str(temperature)] = EM
+        if temperature not in self.Temps:
+            self.Temps.append(temperature)
