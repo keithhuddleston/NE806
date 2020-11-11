@@ -212,8 +212,13 @@ class Nuclide_Data:
         self.Resonator = Resonator
         return
     
-    def load_data(self, filename, file_content, temperature):
-        EM, XS = np.loadtxt(filename, delimiter=',', unpack=True, skiprows=1)
+    def load_data(self, filename, file_content, temperature, load_header=True):
+        if load_header:
+            EM, XS = np.loadtxt(filename, delimiter=',', 
+                                unpack=True, skiprows=1)
+        else:
+            EM, XS = np.loadtxt(filename, delimiter=',', unpack=True)
+
         if len(EM) != len(set(EM)):
             ind = np.zeros(len(EM)-len(set(EM)), dtype=int)
             if len(ind) > 0:

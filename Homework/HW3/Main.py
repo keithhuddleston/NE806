@@ -162,22 +162,3 @@ U238GE = Make_Group_Datafile(U238, sd, C16, 'Data/Group/U238_Group_ES.txt', 1)
 U238GN = Make_Group_Datafile(U238, sd, C16, 'Data/Group/U238_Group_NG.txt', 2)
 U235GE = Make_Group_Datafile(U235, sd, C16, 'Data/Group/U235_Group_ES.txt', 1)
 U235GB = Make_Group_Datafile(U235, sd, C16, 'Data/Group/U235_Group_NG.txt', 2)
-
-
-# ============================================================================
-# Litmus Test, Make Sure Group Function is Working
-# ============================================================================
-if __name__ == "__main__":
-    Emesh = np.logspace(-5, 7, 75000)
-    p = np.ones(len(Emesh))
-    s = np.ones(len(Emesh))
-    e, s = Seperate_Groups(Emesh, s, C16)
-    p = Seperate_Groups(Emesh, p, C16)[1]
-    sg = np.zeros(len(e))
-    for i in range(len(sg)):
-        sg[i] = sigma_g(p[i], s[i], e[i], C16)
-    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
-    ax.set_xscale( "log" )
-    ax.set_yscale( "log" )
-    for i in range(len(sg)):
-        ax.fill_between(e[i], sg[i])
