@@ -240,3 +240,41 @@ class Nuclide_Data:
             self.NGEM[str(temperature)] = EM
         if temperature not in self.Temps:
             self.Temps.append(temperature)
+            
+def Seperate_Groups(x_vals, y_vals, group_structure):
+    # Indices used to place group stucture energy bounds
+    ind_G = np.zeros(len(group_structure), dtype=int)
+    k = 0
+    for i in range(len(x_vals)):
+        if x_vals[i] > group_structure[k]:
+            ind_G[k] = int(i)
+            k += 1
+    if ind_G[-1] == 0:
+        ind_G[-1] = len(x_vals)
+
+    xg = [] # Group-wise x values
+    yg = [] # Group-wise y values
+    
+    # Interpolate group boundary values for y
+    bg = np.interp(group_structure, x_vals, y_vals)
+    
+    # Seperate data into groupwise lists
+    for i in range(len(ind_G[:-1])):
+        L1 = [group_structure[i]] + list(x_vals[ind_G[i]:ind_G[i+1]]) \
+           + [group_structure[i+1]]
+        L2 = [bg[i]] + list(y_vals[ind_G[i]:ind_G[i+1]]) \
+           + [bg[i+1]]
+        if L1[0] == L1[1]:
+            L1 = L1[1:]
+            L2 = L2[1:]
+        if L1[-1] == L1[-2]:
+            L1 = L1[:-1]
+            L2 = L2[:-1]            
+        xg.append(np.array(L1))
+        yg.append(np.array(L2))
+    # Return a list containing lists of groupwise data
+    return xg, yg
+
+# Narrow Resonance Flux Approximation
+def phinr(sigma_t, sigma_o, E):
+    return 1 / (E*(sigma_t + sigma_o))

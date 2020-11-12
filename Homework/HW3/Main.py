@@ -25,7 +25,7 @@ def phiwr(sigma_a, sigma_o, E):
     return 1 / (E*(sigma_a + sigma_o))
 
 # Microscopic Flux Weighted Average Cross Section
-def sigma_g(Phi, XS, Emesh, Group_Structure):
+def sigma_g(Phi, XS):
     return(sum(Phi*XS)/sum(Phi))
 
 def Seperate_Groups(x_vals, y_vals, group_structure):
@@ -82,20 +82,29 @@ def Make_Group_Datafile(ic, sd, gs, filename, rt=1):
             phi     = phinr(sigma_a+sigma_e, sd[j], Emesh)
             e, s = Seperate_Groups(Emesh, xs, gs)
             p = Seperate_Groups(Emesh, phi, gs)[1]
-            
             sg = np.zeros(len(e))
             for k in range(len(sg)):
-                sg[k] = sigma_g(p[k], s[k], e[k], gs)
+                sg[k] = sigma_g(p[k], s[k])
                 N[k+i*len(sg)][2+j] = sg[k]
                 N[k+i*len(sg)][2] = Temps[i]
                 N[k+i*len(sg)][0]= GL[k]
                 N[k+i*len(sg)][1]= GU[k]
         # Plot Results
         fig, ax1 = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
-        ax1.set_xscale( "log" )
-        for k in range(len(sg)):
-            ax1.fill_between(e[k], sg[k])
-            ax1.loglog(e[k], s[k], color='black', linestyle='--')
+        ax1.set_xscale("log")
+        ax1.set_yscale("log")
+        plt.xlabel('Energy (eV)'), plt.ylabel('Cross Section (Barns)')
+        ax1.plot(Emesh, xs, color='black')
+        plt.xlim(min(gs), max(gs)) 
+        for i in range(len(gs)-1):
+            ax1.plot([gs[i], gs[i+1]], [sg[i], sg[i]], c='r')
+        for i in range(len(gs)-2):
+            ax1.plot([gs[i+1], gs[i+1]], [sg[i], sg[i+1]], c='r')
+        ax2 = ax1.twinx()
+        ax2.loglog(Emesh, phi)
+        ax2.set_ylabel('Flux Shape Function')
+        plt.legend([''])
+        plt.show()
     np.savetxt(filename, N, delimiter='\t', header=header)
     return N
 
@@ -157,8 +166,8 @@ U235.load_data('Data/Doppler/U235_NG_1200',    'NG', 1200)
 # Create Group Files
 # ============================================================================
 H1GE   = Make_Group_Datafile(H1,   sd, C16, 'Data/Group/H1_Group_ES.txt',   1)
-O16GE  = Make_Group_Datafile(O16,  sd, C16, 'Data/Group/O16_Group_ES.txt',  1)
-U238GE = Make_Group_Datafile(U238, sd, C16, 'Data/Group/U238_Group_ES.txt', 1)
-U238GN = Make_Group_Datafile(U238, sd, C16, 'Data/Group/U238_Group_NG.txt', 2)
-U235GE = Make_Group_Datafile(U235, sd, C16, 'Data/Group/U235_Group_ES.txt', 1)
-U235GB = Make_Group_Datafile(U235, sd, C16, 'Data/Group/U235_Group_NG.txt', 2)
+# O16GE  = Make_Group_Datafile(O16,  sd, C16, 'Data/Group/O16_Group_ES.txt',  1)
+# U238GE = Make_Group_Datafile(U238, sd, C16, 'Data/Group/U238_Group_ES.txt', 1)
+# U238GN = Make_Group_Datafile(U238, sd, C16, 'Data/Group/U238_Group_NG.txt', 2)
+# U235GE = Make_Group_Datafile(U235, sd, C16, 'Data/Group/U235_Group_ES.txt', 1)
+# U235GB = Make_Group_Datafile(U235, sd, C16, 'Data/Group/U235_Group_NG.txt', 2)

@@ -27,8 +27,8 @@ Temps = [600, 900, 1200]
 Emesh = np.logspace(-5, 7, 75000)
 
 # Define the objects for containing data for H1, O16, U_235, U_238 
-H1 = Nuclide_Data(1.008, False)
-O16 = Nuclide_Data(15.995, False)
+H1   = Nuclide_Data(1.008, False)
+O16  = Nuclide_Data(15.995, False)
 U235 = Nuclide_Data(235.044, True)
 U238 = Nuclide_Data(238.051, True)
 
