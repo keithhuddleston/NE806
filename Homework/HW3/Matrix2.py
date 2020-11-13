@@ -20,7 +20,6 @@ def f(E, alpha, Ep):
     return v
 R = np.zeros((len(Es)-1,len(Es)-1))
 S = R*0
-phi = lambda E: 1/E
 alpha = 0.0
 
 

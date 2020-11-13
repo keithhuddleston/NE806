@@ -16,18 +16,18 @@ from NE806_Functions import Nuclide_Data # File written for class
 # Functions
 # ============================================================================
 
-# Narrow Resonance Flux Approximation
+# Narrow Resonance Flux Approximation.
 def phinr(sigma_t, sigma_o, E):
     return 1 / (E*(sigma_t + sigma_o))
 
-# Wide Resonance Flux Approximation
-def phiwr(sigma_a, sigma_o, E):
-    return 1 / (E*(sigma_a + sigma_o))
-
-# Microscopic Flux Weighted Average Cross Section
+# Microscopic Flux Weighted Average Cross Section.  Note, that the energy mesh
+# must be ultra fine for this simplifaction to work properly.
 def sigma_g(Phi, XS):
     return(sum(Phi*XS)/sum(Phi))
 
+# Function for seperating the cross section data obtained from either the BNL
+# website or cross section data obtained using the Doppler function.  Note,
+# 
 def Seperate_Groups(x_vals, y_vals, group_structure):
     # Indices used to place group stucture energy bounds
     ind_G = np.zeros(len(group_structure), dtype=int)
@@ -62,7 +62,7 @@ def Seperate_Groups(x_vals, y_vals, group_structure):
     # Return a list containing lists of groupwise data
     return xg, yg
 
-def Make_Group_Datafile(ic, sd, gs, filename, rt=1):
+def Make_Group_Datafile(ic, sd, gs, filename, rt=1, Plot=True):
     Temps = [str(i) for i in ic.Temps]
     header = 'NG='+str(len(gs)-1)+'\nGL\tGU\tTemperature\t'
     for i in sd:
@@ -89,22 +89,23 @@ def Make_Group_Datafile(ic, sd, gs, filename, rt=1):
                 N[k+i*len(sg)][2] = Temps[i]
                 N[k+i*len(sg)][0]= GL[k]
                 N[k+i*len(sg)][1]= GU[k]
-        # Plot Results
-        fig, ax1 = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
-        ax1.set_xscale("log")
-        ax1.set_yscale("log")
-        plt.xlabel('Energy (eV)'), plt.ylabel('Cross Section (Barns)')
-        ax1.plot(Emesh, xs, color='black')
-        plt.xlim(min(gs), max(gs)) 
-        for i in range(len(gs)-1):
-            ax1.plot([gs[i], gs[i+1]], [sg[i], sg[i]], c='r')
-        for i in range(len(gs)-2):
-            ax1.plot([gs[i+1], gs[i+1]], [sg[i], sg[i+1]], c='r')
-        ax2 = ax1.twinx()
-        ax2.loglog(Emesh, phi)
-        ax2.set_ylabel('Flux Shape Function')
-        plt.legend([''])
-        plt.show()
+            # Plot Results
+            if Plot:
+                fig, ax1 = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
+                ax1.set_xscale("log")
+                ax1.set_yscale("log")
+                plt.xlabel('Energy (eV)'), plt.ylabel('Cross Section (Barns)')
+                ax1.plot(Emesh, xs, color='black', linewidth=2.25)
+                plt.xlim(min(gs), max(gs)) 
+                for k in range(len(gs)-1):
+                    ax1.plot([gs[k], gs[k+1]], [sg[k], sg[k]], c='r', linewidth=2.25)
+                for k in range(len(gs)-2):
+                    ax1.plot([gs[k+1], gs[k+1]], [sg[k], sg[k+1]], c='r', linewidth=2.25)
+                ax2 = ax1.twinx()
+                ax2.loglog(Emesh, phi, linewidth=2.25)
+                ax2.set_ylabel('Flux Shape Function Arb. Units')
+                plt.legend([''])
+                plt.show()
     np.savetxt(filename, N, delimiter='\t', header=header)
     return N
 

@@ -29,20 +29,17 @@ def Doppler(E2, E1, S1, T1, T2, M, m=1.009):
         Temperature of the reference cross section data.
     T2 : Float
         New temperature at which to evaluate cross sections at.
-    m : Float
-        Atomic mass of projectile, 1.009 for Neutron.
     M : Float
         Atomic mass of target.
-    neg : Int, optional
-        DESCRIPTION. The default is False.
-
+    m : Float
+        Atomic mass of projectile, 1.009 for Neutron.
     Returns
     -------
     S2 : array_like
         Reavaluated cross section data for energies E2, and temperature T2
 
     """
-    Bk     = 6.617*10**-5        # Boltzman Constant, [ev K^-1]
+    Bk     = 6.617*10**-5        # Boltzman Constant, [eV K^-1]
     alpha  = (M/m)/(Bk*(T2-T1))  # Alpha term found in Doppler broadening Eqs.
     S2     = np.zeros(len(E2))   # Initialize new cross section data array
     S2_pos = np.zeros(len(E2))

@@ -12,7 +12,6 @@ from NE806_Functions import phinr
 # ============================================================================
 H1 = Nuclide_Data(1.008, False)
 H1.load_data('Data/Doppler/H1_ES_300.txt', 'ES', 300)
-plt.loglog(H1.ESEM['300'], H1.ESXS['300'])
 
 # ============================================================================
 # Functions
@@ -35,6 +34,10 @@ alpha = 0.0
 # ============================================================================
 # Functions
 # ============================================================================
+def Scatter_Matrix(sigma, E, N, A, phi):
+    Sigma = sigma*N
+    alpha = ((A-1)/(A+1))**2
+
 Em = H1.ESEM['300']
 sigma_e = H1.ESXS['300']
 sigma_a = H1.NGXS['300']
@@ -54,13 +57,11 @@ for g in range(len(Es)-1):
         vals = []
         for i in range(len(E_gp)):
             vals.append(np.trapz(f(E_g, alpha, E_gp[i]), E_g))
-        phi_gp = np.trapz(p[gp], E_gp)
-        R_gp_g = np.trapz(s[gp][i]*p[gp][i]*np.array(vals), E_gp)
+        R_gp_g = np.trapz(s[gp]*p[gp]*np.array(vals), E_gp)
         R[g, gp] = R_gp_g
-        S[g, gp] = R[g, gp] / phi_gp 
+        S[g, gp] = R[g, gp] / np.trapz(p[gp], E_gp) 
 
 plt.matshow(S)
-
 a = S[0]
 for i in range(1, len(S)):
     a += S[i]
