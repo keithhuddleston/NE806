@@ -17,7 +17,7 @@ from scipy.special import erf
 # Create Text Files Containing the Doppler Broadened Cross Sections
 # ============================================================================
 def Doppler(E2, E1, S1, T1, T2, M, m=1.009):
-    """
+    """ Doppler Broadens 
 
     Parameters
     ----------
