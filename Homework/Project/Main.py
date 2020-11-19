@@ -9,7 +9,7 @@
 # ============================================================================
 import numpy as np
 import matplotlib.pyplot as plt
-from NE806_Functions import Nuclide_Data # File written for class
+from Project_Utilities.py import Nuclide_Data # File written for class
 
 
 # ============================================================================
@@ -129,44 +129,21 @@ sd = [1e1, 1e2, 1e3, 1e4, 1e5]
 # ============================================================================
 # Load Interpolated Interpreted Plotted Data Files and Doppler-Broadened Data
 # ============================================================================
-H1 = Nuclide_Data(1.008, False)
-O16 = Nuclide_Data(15.995, False)
-U238 = Nuclide_Data(238.051, True)
-U235 = Nuclide_Data(235.044, True)
+H1 = Nuclide_Data('H1', 1.008, [1, 1, 0])
+O16 = Nuclide_Data('O16', 15.995, [1, 1, 0])
+U235 = Nuclide_Data('U235', 235.044, [1, 1, 1])
+U238 = Nuclide_Data('U238', 238.051, [1, 1, 1])
 
-H1.load_data('Data/Doppler/H1_ES_300.txt', 'ES', 300)
-H1.load_data('Data/Doppler/H1_ES_600',     'ES', 600)
-H1.load_data('Data/Doppler/H1_ES_900',     'ES', 900)
-H1.load_data('Data/Doppler/H1_ES_1200',    'ES', 1200)
-
-O16.load_data('Data/Doppler/O16_ES_300.txt', 'ES', 300)
-O16.load_data('Data/Doppler/O16_ES_600',     'ES', 600)
-O16.load_data('Data/Doppler/O16_ES_900',     'ES', 900)
-O16.load_data('Data/Doppler/O16_ES_1200',    'ES', 1200)
-
-U238.load_data('Data/Doppler/U238_ES_300.txt', 'ES', 300)
-U238.load_data('Data/Doppler/U238_ES_600',     'ES', 600)
-U238.load_data('Data/Doppler/U238_ES_900',     'ES', 900)
-U238.load_data('Data/Doppler/U238_ES_1200',    'ES', 1200)
-U238.load_data('Data/Doppler/U238_NG_300.txt', 'NG', 300)
-U238.load_data('Data/Doppler/U238_NG_600',     'NG', 600)
-U238.load_data('Data/Doppler/U238_NG_900',     'NG', 900)
-U238.load_data('Data/Doppler/U238_NG_1200',    'NG', 1200)
-
-U235.load_data('Data/Doppler/U235_ES_300.txt', 'ES', 300)
-U235.load_data('Data/Doppler/U235_ES_600',     'ES', 600)
-U235.load_data('Data/Doppler/U235_ES_900',     'ES', 900)
-U235.load_data('Data/Doppler/U235_ES_1200',    'ES', 1200)
-U235.load_data('Data/Doppler/U235_NG_300.txt', 'NG', 300)
-U235.load_data('Data/Doppler/U235_NG_600',     'NG', 600)
-U235.load_data('Data/Doppler/U235_NG_900',     'NG', 900)
-U235.load_data('Data/Doppler/U235_NG_1200',    'NG', 1200)
+H1.Load_Doppler_Data([600, 900, 1200])
+O16.Load_Doppler_Data([600, 900, 1200])
+U235.Load_Doppler_Data([600, 900, 1200])
+U238.Load_Doppler_Data([600, 900, 1200])
 
 
 # ============================================================================
 # Create Group Files
 # ============================================================================
-H1GE   = Make_Group_Datafile(H1,   sd, C16, 'Data/Group/H1_Group_ES.txt',   1)
+# H1GE   = Make_Group_Datafile(H1,   sd, C16, 'Data/Group/H1_Group_ES.txt',   1)
 # O16GE  = Make_Group_Datafile(O16,  sd, C16, 'Data/Group/O16_Group_ES.txt',  1)
 # U238GE = Make_Group_Datafile(U238, sd, C16, 'Data/Group/U238_Group_ES.txt', 1)
 # U238GN = Make_Group_Datafile(U238, sd, C16, 'Data/Group/U238_Group_NG.txt', 2)

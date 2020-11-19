@@ -65,12 +65,14 @@ class Nuclide_Data:
     def Load_Doppler_Data(self, Temp):
         """ Load Doppler-Broadened cross sections """
         types = ['ES', 'Total', 'Fission']
+        print('Loading Doppler-Broadened Data...')
         for i in Temp:
+            EM = [[0], [0], [0]]
+            XS = [[0], [0], [0]]
             for j in range(3):
                 if self.B[j]:
                     name = 'Data/Doppler/' + self.N + '_'\
                          + types[j] + '_' + str(i) + '.txt'
-                    EM = [[0], [0], [0]]
-                    XS = [[0], [0], [0]]
                     EM[j], XS[j] = np.loadtxt(name, unpack=True, delimiter=',')
-                    self.EM[i], self.XS[i] = EM, XS
+            self.EM[i], self.XS[i] = EM, XS
+            self.T.append(i)

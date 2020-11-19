@@ -34,7 +34,7 @@ def Plot_Data(N, T):
     elif N.B[-1] == 1:
         plt.legend(['Elastic Scatter', 'Total', 'Fission'])
     plt.show()
-    
+
 if __name__ == "__main__":
     H1 = Nuclide_Data('H1', 1.008, [1, 1, 0])
     O16 = Nuclide_Data('O16', 15.995, [1, 1, 0])

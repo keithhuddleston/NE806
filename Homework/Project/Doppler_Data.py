@@ -109,7 +109,7 @@ def Doppler(E2, E1, S1, T1, T2, M, m=1.009):
             S2 = S2_pos - S2_neg
     return S2
 
-def Doppler_Nuclide(Nuclide, Temp, Energy=None):
+def Make_Doppler_Data(Nuclide, Temp, Energy=None):
     print('='*28 + '\nDoppler Broadening ' + Nuclide.N + ' Data' + '\n' + \
           '='*28 + '\n')
     data_type = ['ES', 'Total', 'Fission']
@@ -153,8 +153,8 @@ if __name__ == "__main__":
     U238 = Nuclide_Data('U238', 238.051, [1, 1, 1])
     
     # Doppler-Broaden Data
-    Doppler_Nuclide(H1, Temps)
-    Doppler_Nuclide(O16, Temps)
-    Doppler_Nuclide(U235, Temps)
-    Doppler_Nuclide(U238, Temps)
+    Make_Doppler_Data(H1, Temps)
+    Make_Doppler_Data(O16, Temps)
+    Make_Doppler_Data(U235, Temps)
+    Make_Doppler_Data(U238, Temps)
 
