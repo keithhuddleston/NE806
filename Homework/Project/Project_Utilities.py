@@ -65,7 +65,7 @@ class Nuclide_Data:
     def Load_Doppler_Data(self, Temp):
         """ Load Doppler-Broadened cross sections """
         types = ['ES', 'Total', 'Fission']
-        print('Loading Doppler-Broadened Data...')
+        print('Loading Doppler-Broadened Data...\n')
         for i in Temp:
             EM = [[0], [0], [0]]
             XS = [[0], [0], [0]]

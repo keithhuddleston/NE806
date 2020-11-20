@@ -166,8 +166,8 @@ U235.load_data('Data/Doppler/U235_NG_1200',    'NG', 1200)
 # ============================================================================
 # Create Group Files
 # ============================================================================
-H1GE   = Make_Group_Datafile(H1,   sd, C16, 'Data/Group/H1_Group_ES.txt',   1)
-# O16GE  = Make_Group_Datafile(O16,  sd, C16, 'Data/Group/O16_Group_ES.txt',  1)
+# H1GE   = Make_Group_Datafile(H1,   sd, C16, 'Data/Group/H1_Group_ES.txt',   1)
+O16GE  = Make_Group_Datafile(O16,  sd, C16, 'Data/Group/O16_Group_ES.txt',  1)
 # U238GE = Make_Group_Datafile(U238, sd, C16, 'Data/Group/U238_Group_ES.txt', 1)
 # U238GN = Make_Group_Datafile(U238, sd, C16, 'Data/Group/U238_Group_NG.txt', 2)
 # U235GE = Make_Group_Datafile(U235, sd, C16, 'Data/Group/U235_Group_ES.txt', 1)
