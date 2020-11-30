@@ -19,9 +19,7 @@ H1.load_data('Data/Doppler/H1_ES_300.txt', 'ES', 300)
 Es = np.array([1.00e1 , 8.21e-1, 5.53e-3, 4.00e-6, 1.30e-6, 1.15e-6, 1.097e-6,
                1.02e-6, 9.71e-7, 8.50e-7, 6.25e-7, 3.50e-7, 2.80e-7, 1.40e-7 ,
                5.80e-8, 3.00e-8, 1.00e-11])*1e6 # eV
-def Scatter_Matrix(sigma, N, A, phi):
-    Sigma = sigma*N
-    alpha = ((A-1)/(A+1))**2
+
 def f(E, alpha, Ep):
     v = 1/Ep/(1-alpha)*np.ones_like(E)
     v[alpha*Ep >= E] = 0.0
@@ -46,14 +44,14 @@ phi_vals = phinr(sigma_a+sigma_e, sd[0], Em)
 e, s = Seperate_Groups(Em, sigma_e, Es[::-1])
 p = Seperate_Groups(Em, phi_vals, Es[::-1])[1]
 
-E_log = e[::-1]
-s     = s[::-1]
-p     = p[::-1]
+e = e[::-1]
+s = s[::-1]
+p = p[::-1]
 
 for g in range(len(Es)-1):
-    E_g = E_log[g]
+    E_g = e[g]
     for gp in range(len(Es)-1):
-        E_gp = E_log[gp]
+        E_gp = e[gp]
         vals = []
         for i in range(len(E_gp)):
             vals.append(np.trapz(f(E_g, alpha, E_gp[i]), E_g))

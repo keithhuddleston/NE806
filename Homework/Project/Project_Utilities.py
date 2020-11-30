@@ -11,11 +11,12 @@ import numpy as np
 
 class Nuclide_Data:
     """" Class for loading and passing data """
-    def __init__(self, N, M, B):
+    def __init__(self, N, M, B, A=1):
         self.N = N    # Name of Nuclide, ex. H1, O16, U235, U238 
         self.M = M    # Atomic Mass of Nuclide
         self.B = B    # Tuple of Bools for [Elastic Scatter, Total, Fission]
                       # ex 1. H1 B = [1, 1, 0], ex2, U238 B = [1, 1, 1]
+        self.A = A    # Atomic Number
         self.XS = {}  # Cross Section Data
         self.EM = {}  # Energy Mesh Data       
         self.T = []   # Temperature Values of data
