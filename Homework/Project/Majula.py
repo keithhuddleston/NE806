@@ -17,19 +17,22 @@ from Project_Utilities import Nuclide_Data # File written for class
 from Removal_Matrix import Interpolate_Group_Total
 from Removal_Matrix import Background_Cross_Section
 from Scatter_Matrix import Scatter_Matrix
-
+from Fission import Fission_Matrix
+from scipy.linalg import eig
 
 # ============================================================================
 # Load Interpolated Interpreted Plotted Data Files and Doppler-Broadened Data
 # ============================================================================
 H1 = Nuclide_Data('H1', 1.008, [1, 1, 0], 1)
-O16 = Nuclide_Data('O16', 15.995, [1, 1, 0], 16)
-U235 = Nuclide_Data('U235', 235.044, [1, 1, 1], 235)
-U238 = Nuclide_Data('U238', 238.051, [1, 1, 1], 238)
-
 H1.Load_Doppler_Data([600, 900, 1200])
+
+O16 = Nuclide_Data('O16', 15.995, [1, 1, 0], 16)
 O16.Load_Doppler_Data([600, 900, 1200])
+
+U235 = Nuclide_Data('U235', 235.044, [1, 1, 1], 235)
 U235.Load_Doppler_Data([600, 900, 1200])
+
+U238 = Nuclide_Data('U238', 238.051, [1, 1, 1], 238)
 U238.Load_Doppler_Data([600, 900, 1200])
 
 Casmo_16 = np.array([1.00e1,   8.21e-1, 5.53e-3, 4.00e-6, 1.30e-6, 1.15e-6, 
@@ -49,11 +52,14 @@ if __name__ == '__main__':
     Temperature = 300
     so = Background_Cross_Section(N, s)
     print("For our approximation the dilution cross-section is "+str(so)+'\n')  
-    R = Interpolate_Group_Total(N, Names, Temperature, so, Casmo_16)
+    T = Interpolate_Group_Total(N, Names, Temperature, so, Casmo_16)
     Nuclides = [H1, O16, U235, U238]
     print('Calculating S this takes awhile...\n')
     S = Scatter_Matrix(Nuclides, N, Casmo_16, so, 300)
     
-    S = R - S
+    R = np.T - S
+    Names = [H1, O16, U235, U238]
+    nu = 2.54
+    F = Fission_Matrix(Names, N, 300, so, Casmo_16, nu)
     
-    
+    test = eig(R, F)

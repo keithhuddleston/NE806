@@ -63,17 +63,19 @@ class Nuclide_Data:
                 seen.append(n)
         return res
 
-    def Load_Doppler_Data(self, Temp):
+    def Load_Doppler_Data(self, Temperature):
         """ Load Doppler-Broadened cross sections """
         types = ['ES', 'Total', 'Fission']
-        print('Loading Doppler-Broadened Data...\n')
-        for i in Temp:
+        print('Loading Doppler-Broadened Data at '+str(Temperature)+
+              ' for '+self.N+'...\n')
+        for i in Temperature:
             EM = [[0], [0], [0]]
             XS = [[0], [0], [0]]
             for j in range(3):
                 if self.B[j]:
                     name = 'Data/Doppler/' + self.N + '_'\
                          + types[j] + '_' + str(i) + '.txt'
-                    EM[j], XS[j] = np.loadtxt(name, unpack=True, delimiter=',')
+                    EM[j], XS[j] = np.loadtxt(name, unpack=True, 
+                                              delimiter=',')
             self.EM[i], self.XS[i] = EM, XS
             self.T.append(i)
