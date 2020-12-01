@@ -37,7 +37,13 @@ def Plot_Data(N, T, Mode=1, Type=0):
         ax.set_xscale('log'), ax.set_yscale('log')
         for i in N.T:
             ax.plot(N.EM[i][Type], N.XS[i][Type])
-                
+        plt.legend([r'$300\degree K$', r'$600\degree K$', 
+                    r'$900\degree K$', r'$1200\degree K$'])
+        plt.xlabel('Energy [eV]')
+        plt.ylabel('Cross Section [Barns]')
+        plt.grid(ls='--', axis='y')
+        plt.xlim([6, 11])
+        
 if __name__ == "__main__":
     H1 = Nuclide_Data('H1', 1.008, [1, 1, 0])
     O16 = Nuclide_Data('O16', 15.995, [1, 1, 0])

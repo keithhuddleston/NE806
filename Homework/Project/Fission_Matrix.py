@@ -116,6 +116,7 @@ def Fission_Matrix(Nu, N, Nuclides, Temperature, Dilution, Group_Structure):
     Chi = Chi_Matrix(Group_Structure)
     Matrix = Nu*Chi*Matrix
     print('Fission Matrix all done :)...\n')
+    
     return Matrix
 
 # ============================================================================

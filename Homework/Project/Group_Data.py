@@ -64,28 +64,28 @@ def Group(e_vals, xs_vals, group_structure, e_total, xs_total, xs_dilution,
         val = num/den
         y_vals_group.append(val)
 
-    if plot:
-        plt.rcParams.update({'font.size': 14})
-        fig, ax1 = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
-        ax1.set_xscale("log")
-        ax1.set_yscale("log")
-        plt.xlabel('Energy (eV)'), plt.ylabel('Cross Section (Barns)')
-        ax1.plot(e_vals, xs_vals, color='black')
-        plt.xlim(min(group_structure), max(group_structure)) 
-        for k in range(len(group_structure)-1):
-            ax1.plot([group_structure[k], group_structure[k+1]], 
-                     [y_vals_group[k], y_vals_group[k]], c='r')
-            for k in range(len(group_structure)-2):
-                ax1.plot([group_structure[k+1], group_structure[k+1]], 
-                         [y_vals_group[k], y_vals_group[k+1]], c='r')
-        ax2 = ax1.twinx()
-        ax2.loglog(e_vals, phi)
-        ax2.set_ylabel('Flux Shape Function Arb. Units')
-        plt.title(Name+' '+Type+' Cross-Section Evaluated at '
-                  +str(Temp)+r'$\degree\ K\ for\ $'+r'$\sigma_b=$'
-                  +str(xs_dilution)+' Barnes')
+    # if plot:
+    plt.rcParams.update({'font.size': 14})
+    fig, ax1 = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
+    ax1.set_xscale("log")
+    ax1.set_yscale("log")
+    plt.xlabel('Energy (eV)'), plt.ylabel('Cross Section (Barns)')
+    ax1.plot(e_vals, xs_vals, color='black')
+    plt.xlim(min(group_structure), max(group_structure)) 
+    for k in range(len(group_structure)-1):
+        ax1.plot([group_structure[k], group_structure[k+1]], 
+                  [y_vals_group[k], y_vals_group[k]], c='r')
+        for k in range(len(group_structure)-2):
+            ax1.plot([group_structure[k+1], group_structure[k+1]], 
+                      [y_vals_group[k], y_vals_group[k+1]], c='r')
+    ax2 = ax1.twinx()
+    ax2.loglog(e_vals, phi)
+    ax2.set_ylabel('Flux Shape Function Arb. Units')
+    plt.title(Name+' '+Type+' Cross-Section Evaluated at '
+              +str(Temp)+r'$\degree\ K\ for\ $'+r'$\sigma_b=$'
+              +str(xs_dilution)+' Barnes')
         
-    return y_vals_group 
+    return y_vals_group[::-1]
 
 def Make_Group_Data(Nuclide, Group_Structure, Dilution):
     """ Create flux weighted averages cross section data """
@@ -125,39 +125,37 @@ def Make_Group_Data(Nuclide, Group_Structure, Dilution):
 
 
 # ============================================================================
-# Define Group and Background Data
+# Testing
 # ============================================================================
-Casmo_2 = np.array([1.00e1, 1.00e-7, 1.00e-11])*1e6 # eV
-Casmo_2 = Casmo_2[::-1]
+if __name__ == '__main__':
+    # --- Function Testing Section ---
+    print('Testing the file Group_Data.py\n')
+    
+    H1 = Nuclide_Data('H1', 1.008, [1, 1, 0], 1)
+    H1.Load_Doppler_Data([600, 900, 1200])
+    
+    O16 = Nuclide_Data('O16', 15.995, [1, 1, 0], 16)
+    O16.Load_Doppler_Data([600, 900, 1200])
+    
+    U235 = Nuclide_Data('U235', 235.044, [1, 1, 1], 235)
+    U235.Load_Doppler_Data([600, 900, 1200])
+    
+    U238 = Nuclide_Data('U238', 238.051, [1, 1, 1], 238)
+    U238.Load_Doppler_Data([600, 900, 1200])
+    
+    Casmo_16 = np.array([1.00e1,   8.21e-1,  5.53e-3, 4.00e-6, 1.30e-6, 
+                         1.15e-6,  1.097e-6, 1.02e-6, 9.71e-7, 8.50e-7, 
+                         6.25e-7,  3.50e-7,  2.80e-7, 1.40e-7, 5.80e-8, 
+                         3.00e-8,  1.00e-11])*1e6# eV
+    Casmo_16 = Casmo_16[::-1]
+    
+    Casmo_2 = np.array([1.00e1, 1.00e-7, 1.00e-11]) # MeV
+    Casmo_2 = Casmo_2[::-1]
 
-Casmo_16 = np.array([1.00e1,   8.21e-1, 5.53e-3, 4.00e-6, 1.30e-6, 1.15e-6, 
-                     1.097e-6, 1.02e-6, 9.71e-7, 8.50e-7, 6.25e-7, 3.50e-7, 
-                     2.80e-7, 1.40e-7,  5.80e-8, 3.00e-8, 1.00e-11])*1e6 # eV
-Casmo_16 = Casmo_16[::-1]
+    # Microscopic Dilution/Background Cross Section
+    Dilution = [1e1, 1e2, 1e3, 1e4, 1e5] # Barns
 
-# Microscopic Dilution/Background Cross Section
-Dilution = [1e1, 1e2, 1e3, 1e4, 1e5]
-
-
-# ============================================================================
-# Load Interpolated Interpreted Plotted Data Files and Doppler-Broadened Data
-# ============================================================================
-H1 = Nuclide_Data('H1', 1.008, [1, 1, 0])
-# O16 = Nuclide_Data('O16', 15.995, [1, 1, 0])
-# U235 = Nuclide_Data('U235', 235.044, [1, 1, 1])
-# U238 = Nuclide_Data('U238', 238.051, [1, 1, 1])
-
-H1.Load_Doppler_Data([600, 900, 1200])
-# O16.Load_Doppler_Data([600, 900, 1200])
-# U235.Load_Doppler_Data([600, 900, 1200])
-# U238.Load_Doppler_Data([600, 900, 1200])
-
-
-# ============================================================================
-# Create Group Files
-# ============================================================================
-Make_Group_Data(H1, Casmo_16, Dilution)
-# Make_Group_Data(O16, Casmo_16, Dilution)
-# Make_Group_Data(U235, Casmo_16, Dilution)
-# Make_Group_Data(U238, Casmo_16, Dilution)
-        
+    Make_Group_Data(H1, Casmo_16, Dilution)
+    Make_Group_Data(O16, Casmo_16, Dilution)
+    Make_Group_Data(U235, Casmo_16, Dilution)
+    Make_Group_Data(U238, Casmo_16, Dilution)
