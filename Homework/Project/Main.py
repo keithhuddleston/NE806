@@ -13,11 +13,14 @@
 # ============================================================================
 import numpy as np
 import matplotlib.pyplot as plt
-from Project_Utilities import Nuclide_Data # File written for class
-from Removal_Matrix import Interpolate_Group_Total
+
+
+# File written for class
+from Project_Utilities import Nuclide_Data
 from Removal_Matrix import Background_Cross_Section
+from Removal_Matrix import Removal_Matrix
 from Scatter_Matrix import Scatter_Matrix
-from Fission import Fission_Matrix
+from Fission_Matrix import Fission_Matrix
 from scipy.linalg import eig
 
 # ============================================================================
@@ -37,7 +40,8 @@ U238.Load_Doppler_Data([600, 900, 1200])
 
 Casmo_16 = np.array([1.00e1,   8.21e-1, 5.53e-3, 4.00e-6, 1.30e-6, 1.15e-6, 
                      1.097e-6, 1.02e-6, 9.71e-7, 8.50e-7, 6.25e-7, 3.50e-7, 
-                     2.80e-7, 1.40e-7,  5.80e-8, 3.00e-8, 1.00e-11])*1e6 # eV
+                     2.80e-7,  1.40e-7, 5.80e-8, 3.00e-8, 1.00e-11])*1e6 # eV
+
 Casmo_16 = Casmo_16[::-1]
 
 # Microscopic Dilution/Background Cross Section

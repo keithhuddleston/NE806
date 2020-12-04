@@ -37,7 +37,7 @@ from Removal_Matrix import Background_Cross_Section
 # ============================================================================
 def Watt_Spectrum(E):
     """ Watt Spectrum as a function of energy in [MeV] """
-    E = E*1e-6
+#    E = E/1e6
     return 0.4865*np.sinh(np.sqrt(2*E))*np.exp(-E)
 
 # Chi_Matrix is the function which will be imported to other Python files.
@@ -146,9 +146,9 @@ if __name__ == '__main__':
     Casmo_16 = np.array([1.00e1,   8.21e-1,  5.53e-3, 4.00e-6, 1.30e-6, 
                          1.15e-6,  1.097e-6, 1.02e-6, 9.71e-7, 8.50e-7, 
                          6.25e-7,  3.50e-7,  2.80e-7, 1.40e-7, 5.80e-8, 
-                         3.00e-8,  1.00e-11])*1e6 # eV
+                         3.00e-8,  1.00e-11])  # MeV
     
-    Casmo_2 = np.array([1.00e1, 1.00e-7, 1.00e-11])*1e6 # eV
+    Casmo_2 = np.array([1.00e1, 1.00e-7, 1.00e-11])  # MeV
 
     # Microscopic Dilution/Background Cross Section
     Dilution = [1e1, 1e2, 1e3, 1e4, 1e5] # Barns
@@ -173,7 +173,7 @@ if __name__ == '__main__':
     chi_group_2 = [i[0] for i in Chi_2]
     
     # Calculate Watt Spectrum
-    e = np.logspace(-5, 7, 10000)
+    e = np.logspace(-5, 7, 10000)/1e6
     chi = Watt_Spectrum(e)
     ax.loglog(e, chi, c='k')
 
@@ -184,7 +184,7 @@ if __name__ == '__main__':
                 [chi_group_16[i], chi_group_16[i]], c='r')
         for i in range(len(Casmo_16)-2):
                 ax.plot([Casmo_16[i+1], Casmo_16[i+1]], 
-                         [chi_group_16[i], chi_group_16[i+1]], c='r')
+                          [chi_group_16[i], chi_group_16[i+1]], c='r')
     
     # Casmo 2 Group Plotting
     shape = len(Casmo_2) - 1
@@ -193,7 +193,7 @@ if __name__ == '__main__':
                 [chi_group_2[i], chi_group_2[i]], c='g')
         for i in range(len(Casmo_2)-2):
                 ax.plot([Casmo_2[i+1], Casmo_2[i+1]], 
-                         [chi_group_2[i], chi_group_2[i+1]], c='g')
+                          [chi_group_2[i], chi_group_2[i+1]], c='g')
 
     ax.set_ylabel('Probability, Arbitrary Units')
     ax.set_xlabel('Energy of Neutron Born from Fission [MeV]')
