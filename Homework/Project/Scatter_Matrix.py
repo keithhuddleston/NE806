@@ -27,7 +27,7 @@ def Seperate_Group(Nuclide, Group_Structure, xs_dilution, Temperature):
     e_total  = list(Nuclide.EM[Temperature][1])
     xs_total = list(Nuclide.XS[Temperature][1])
     
-    nn = 1000
+    nn = 200
     
     Length = len(Group_Structure)
     Indices = np.zeros(Length, dtype=int)
@@ -89,8 +89,9 @@ def Micro_Scatter_Matrix(Nuclide, group_structure, Dilution, Temperature):
 def Scatter_Matrix(Nuclides, Ns, group_structure, Dilution, Temperature):
     S = np.zeros((len(group_structure)-1, len(group_structure)-1))  
     for i in range(len(Nuclides)):
-        S += S + Micro_Scatter_Matrix(Nuclides[i], group_structure, 
-                                      Dilution, Temperature)*Ns[i]
+        matrix = Micro_Scatter_Matrix(Nuclides[i], group_structure, 
+                                      Dilution, Temperature)
+        S = S + matrix*Ns[i]
     # plt.matshow(S)
     return S
 
@@ -106,14 +107,14 @@ if __name__ == '__main__':
     H1 = Nuclide_Data('H1', 1.008, [1, 1, 0], 1)
     H1.Load_Doppler_Data([600, 900, 1200])
     
-    # O16 = Nuclide_Data('O16', 15.995, [1, 1, 0], 16)
-    # O16.Load_Doppler_Data([600, 900, 1200])
+    O16 = Nuclide_Data('O16', 15.995, [1, 1, 0], 16)
+    O16.Load_Doppler_Data([600, 900, 1200])
     
-    # U235 = Nuclide_Data('U235', 235.044, [1, 1, 1], 235)
-    # U235.Load_Doppler_Data([600, 900, 1200])
+    U235 = Nuclide_Data('U235', 235.044, [1, 1, 1], 235)
+    U235.Load_Doppler_Data([600, 900, 1200])
     
-    # U238 = Nuclide_Data('U238', 238.051, [1, 1, 1], 238)
-    # U238.Load_Doppler_Data([600, 900, 1200])
+    U238 = Nuclide_Data('U238', 238.051, [1, 1, 1], 238)
+    U238.Load_Doppler_Data([600, 900, 1200])
 
     Casmo_16 = np.array([1.00e1,   8.21e-1,  5.53e-3, 4.00e-6, 1.30e-6, 
                          1.15e-6,  1.097e-6, 1.02e-6, 9.71e-7, 8.50e-7, 
@@ -127,11 +128,12 @@ if __name__ == '__main__':
 
     # Seperate_Group(H1, Casmo_16, so, 300)
 
-    Test_1 = Micro_Scatter_Matrix(H1, Casmo_16, 100, 300)
-    a = Test_1[0]
-    for i in range(1, len(a)):
-        a += Test_1[i]
-    print(a)
-    # Nuclides = [H1, O16, U235, U238]
-
-    # Test_3 = Scatter_Matrix(Nuclides, N, Casmo_16, so, 300)
+    # Test_1 = Micro_Scatter_Matrix(O16, Casmo_16, 100, 300)
+    # a = Test_1[0]
+    # for i in range(1, len(a)):
+    #     a += Test_1[i]
+    # print(a)
+    
+    Nuclides = [H1, O16, U235, U238]
+    Test_3 = Scatter_Matrix(Nuclides, N, Casmo_16, so, 300)
+    

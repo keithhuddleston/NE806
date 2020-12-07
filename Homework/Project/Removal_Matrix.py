@@ -131,4 +131,4 @@ if __name__ == '__main__':
     Test_2 = Removal_Matrix(N, Nuclides, 300, so, Casmo_16)
     
     # TODO fix this error, is messed up because of currenlty used naming conv.
-    # Test_3 = Removal_Matrix(N, Nuclides, 300, so, Casmo_2)
+    # Test_4 = Removal_Matrix(N, Nuclides, 300, so, Casmo_2)
