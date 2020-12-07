@@ -13,7 +13,7 @@
 # ============================================================================
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.linalg import eig
+from scipy.linalg import eigh
 
 # File written for class
 from Project_Utilities import Nuclide_Data
@@ -60,11 +60,13 @@ if __name__ == '__main__':
     Casmo_16 = Casmo_16[::-1]
     S = Scatter_Matrix(Nuclides, N, Casmo_16, so, 300)
     T = R - S
-
+    plt.matshow(R)
+    plt.matshow(S)
+    plt.matshow(T)
     Casmo_16 = np.array([1.00e1,   8.21e-1,  5.53e-3, 4.00e-6, 1.30e-6, 
                          1.15e-6,  1.097e-6, 1.02e-6, 9.71e-7, 8.50e-7, 
                          6.25e-7,  3.50e-7,  2.80e-7, 1.40e-7, 5.80e-8, 
                          3.00e-8,  1.00e-11])  # MeV
     F = Fission_Matrix(nu, N, Nuclides, 300, so, Casmo_16)
     
-    Test_0 = eig(T, F)
+    # Test_0 = eigh(T, F)

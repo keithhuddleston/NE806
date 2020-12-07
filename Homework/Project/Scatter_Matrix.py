@@ -27,7 +27,7 @@ def Seperate_Group(Nuclide, Group_Structure, xs_dilution, Temperature):
     e_total  = list(Nuclide.EM[Temperature][1])
     xs_total = list(Nuclide.XS[Temperature][1])
     
-    nn = 200
+    nn = 1000
     
     Length = len(Group_Structure)
     Indices = np.zeros(Length, dtype=int)
@@ -39,35 +39,28 @@ def Seperate_Group(Nuclide, Group_Structure, xs_dilution, Temperature):
                 break
         Indices[j] = Indices[j] + Indices[j-1]
 
-    for i in Indices:
-        if i > nn:
-            nn = i
-
     shape = len(Group_Structure)-1
-    e_group = np.zeros(shape)
+    e_group = [0] * shape
     for i in range(shape):
         start = Group_Structure[i]
         end = Group_Structure[i+1]
-        e_group[i] = (list(np.linspace(start, end, nn)))
-
-
-
-    # e_group = [np.sort(i) for i in e_group]
+        add = e_total[Indices[i]:Indices[i+1]]
+        e_group[i] = list(np.linspace(start, end, nn)) + list(add)
+    e_group = [np.sort(i) for i in e_group]
     
-    # xs_total_group = [np.interp(i, e_total, xs_total) for i in e_group]
+    xs_group = [np.interp(i, e_vals, xs_vals) for i in e_group]
 
-    # # Narrow Resonance Flux Approximation, see (ADD REFERENCE)
-    # # phi = 1 / (e_vals * (xs_total + xs_dilution))
-
-    # xs_group = [np.interp(i, e_vals, xs_vals) for i in e_group]
-    # phi_group = [1 / (e_group[i] * (xs_total_group[i] + xs_dilution)) for i \
-    #              in range(shape)]
+    # Narrow Resonance Flux Approximation, see (ADD REFERENCE)
+    # phi = 1 / (e_vals * (xs_total + xs_dilution))
+    xs_total_group = [np.interp(i, e_total, xs_total) for i in e_group]
+    phi_group = [1 / (e_group[i] * (xs_total_group[i] + xs_dilution)) for i \
+                  in range(shape)]
     
-    # e_group = e_group[::-1]
-    # xs_group = xs_group[::-1]
-    # phi_group = phi_group[::-1]
+    e_group = e_group[::-1]
+    xs_group = xs_group[::-1]
+    phi_group = phi_group[::-1]
         
-    # return e_group, xs_group, phi_group
+    return e_group, xs_group, phi_group
 
 def Micro_Scatter_Matrix(Nuclide, group_structure, Dilution, Temperature):
     e, s, p = Seperate_Group(Nuclide, group_structure, Dilution, Temperature)
@@ -86,11 +79,11 @@ def Micro_Scatter_Matrix(Nuclide, group_structure, Dilution, Temperature):
             R_gp_g = np.trapz(s[gp]*p[gp]*np.array(vals), E_gp)
             R[g, gp] = R_gp_g
             S[g, gp] = R[g, gp] / np.trapz(p[gp], E_gp)
-    plt.matshow(S)
-    a = S[0]
-    for i in range(1, len(S)):
-        a += S[i]
-    print(a)
+    # plt.matshow(S)
+    # a = S[0]
+    # for i in range(1, len(S)):
+    #     a += S[i]
+    # print(a)
     return S
     
 def Scatter_Matrix(Nuclides, Ns, group_structure, Dilution, Temperature):
@@ -98,7 +91,7 @@ def Scatter_Matrix(Nuclides, Ns, group_structure, Dilution, Temperature):
     for i in range(len(Nuclides)):
         S += S + Micro_Scatter_Matrix(Nuclides[i], group_structure, 
                                       Dilution, Temperature)*Ns[i]
-    plt.matshow(S)
+    # plt.matshow(S)
     return S
 
 # ============================================================================
@@ -134,27 +127,11 @@ if __name__ == '__main__':
 
     # Seperate_Group(H1, Casmo_16, so, 300)
 
-    # Test_1 = Micro_Scatter_Matrix(H1, Casmo_16, so, 300)
-    
-    # input_1 = Casmo_16
-    # input_2 = list(H1.EM[300][1])
-    # def test(Group_Structure, Total_E_Mesh):
-    #     Length = len(Group_Structure)
-    #     Indices = np.zeros(Length, dtype=int)
-    #     for j in range(Length):
-    #         for i in Total_E_Mesh[Indices[j-1]:]:
-    #             if i <= Group_Structure[j]:
-    #                 Indices[j] = Indices[j] + 1
-    #             else:
-    #                 break
-    #         Indices[j] = Indices[j] + Indices[j-1]
-    #     return Indices
-    
-    # Test_0 = test(input_1, input_2)
-    # for i in range(len(Test_0)-1):
-    #     print(input_2[Test_0[i]:Test_0[i+1]])
-    # Test_2 = Micro_Scatter_Matrix(U235, Casmo_16, so, 300)
-    
+    Test_1 = Micro_Scatter_Matrix(H1, Casmo_16, 100, 300)
+    a = Test_1[0]
+    for i in range(1, len(a)):
+        a += Test_1[i]
+    print(a)
     # Nuclides = [H1, O16, U235, U238]
 
     # Test_3 = Scatter_Matrix(Nuclides, N, Casmo_16, so, 300)
