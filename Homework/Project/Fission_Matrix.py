@@ -169,8 +169,8 @@ if __name__ == '__main__':
     Chi_2 = Chi_Matrix(Casmo_2)
 
     # --- Plotting Section ---
-    plt.rcParams.update({'font.size': 15})
-    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(12, 5))
+    plt.rcParams.update({'font.size': 14})
+    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6, 3))
     
     chi_group_16 = [i[0] for i in Chi_16]
     chi_group_2 = [i[0] for i in Chi_2]

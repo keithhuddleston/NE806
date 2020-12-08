@@ -21,11 +21,11 @@ from Utilities.Utilities import Nuclide
 # ============================================================================
 def Plot_Data(N, T, Mode=1, Type=0):
     """ Plots data of the nuclide 'N' for given temperature 'T' """
-    plt.rcParams.update({'font.size': 18})
+    plt.rcParams.update({'font.size': 14})
     if Mode == 1:
         # Make sure data for specified temperature is loaded
         assert T in N.T, 'Data for Temperature "T" not loaded'
-        fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
+        fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6, 6))
         ax.set_xscale('log'), ax.set_yscale('log')
         for i in range(len(N.B)):
             if N.B[i]:
@@ -38,7 +38,7 @@ def Plot_Data(N, T, Mode=1, Type=0):
             plt.legend(['Elastic Scatter', 'Total', 'Fission'])
         plt.show()
     elif Mode == 2:
-        fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(14, 6))
+        fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6, 3))
         ax.set_xscale('log'), ax.set_yscale('log')
         for i in N.T:
             ax.plot(N.e[i][Type], N.s[i][Type])
