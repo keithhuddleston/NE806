@@ -13,8 +13,10 @@
 # Import Statements
 # ============================================================================
 import matplotlib.pyplot as plt
+import os
 
 # Custom files written for project
+os.chdir('../')
 from Utilities.Utilities import Nuclide
 
 
@@ -44,6 +46,7 @@ def Plot_Data(N, T):
 # Load data and use plotting function
 # ============================================================================
 print('PLOTTING cross-section data obtained from the BNL website\n')
+    
 H1   = Nuclide('H1',   1,   1.008,   [1, 1, 0])
 O16  = Nuclide('O16',  16,  15.995,  [1, 1, 0])
 U235 = Nuclide('U235', 235, 235.044, [1, 1, 1])

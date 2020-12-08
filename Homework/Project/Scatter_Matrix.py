@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # Files written for project
-from Project_Utilities import Nuclide_Data
-from Removal_Matrix import Background_Cross_Section
+from Utilities.Utilities import Nuclide
+from Utilities.Utilities import Background_Cross_Section
 
 # ============================================================================
 # Functions
@@ -21,13 +21,13 @@ def Seperate_Group(Nuclide, Group_Structure, xs_dilution, Temperature):
     assert Temperature in Nuclide.T, "Specified temperature not loaded."
     
     # First let's get the scattering energy and cross-section data
-    e_vals  = list(Nuclide.EM[Temperature][0])
-    xs_vals  = list(Nuclide.XS[Temperature][0])
+    e_vals  = list(Nuclide.e[Temperature][0])
+    xs_vals  = list(Nuclide.s[Temperature][0])
     # Second let's get the total energy and cross-section data
-    e_total  = list(Nuclide.EM[Temperature][1])
-    xs_total = list(Nuclide.XS[Temperature][1])
+    e_total  = list(Nuclide.e[Temperature][1])
+    xs_total = list(Nuclide.s[Temperature][1])
     
-    nn = 200
+    nn = 10000
     
     Length = len(Group_Structure)
     Indices = np.zeros(Length, dtype=int)
@@ -104,16 +104,16 @@ if __name__ == '__main__':
     N = [6, 7, 0.1, 1.9]
     s = [20, 10, 10, 0]
     
-    H1 = Nuclide_Data('H1', 1.008, [1, 1, 0], 1)
+    H1 = Nuclide('H1', 1, 1.008, [1, 1, 0])
     H1.Load_Doppler_Data([600, 900, 1200])
     
-    O16 = Nuclide_Data('O16', 15.995, [1, 1, 0], 16)
+    O16 = Nuclide('O16', 16, 15.995, [1, 1, 0])
     O16.Load_Doppler_Data([600, 900, 1200])
     
-    U235 = Nuclide_Data('U235', 235.044, [1, 1, 1], 235)
+    U235 = Nuclide('U235', 235, 235.044, [1, 1, 1])
     U235.Load_Doppler_Data([600, 900, 1200])
     
-    U238 = Nuclide_Data('U238', 238.051, [1, 1, 1], 238)
+    U238 = Nuclide('U238', 238, 238.051, [1, 1, 1])
     U238.Load_Doppler_Data([600, 900, 1200])
 
     Casmo_16 = np.array([1.00e1,   8.21e-1,  5.53e-3, 4.00e-6, 1.30e-6, 
@@ -126,13 +126,13 @@ if __name__ == '__main__':
 
     so = Background_Cross_Section(N, s)
 
-    # Seperate_Group(H1, Casmo_16, so, 300)
+    Seperate_Group(H1, Casmo_16, so, 300)
 
-    # Test_1 = Micro_Scatter_Matrix(O16, Casmo_16, 100, 300)
-    # a = Test_1[0]
-    # for i in range(1, len(a)):
-    #     a += Test_1[i]
-    # print(a)
+    Test_1 = Micro_Scatter_Matrix(O16, Casmo_16, 100, 300)
+    a = Test_1[0]
+    for i in range(1, len(a)):
+        a += Test_1[i]
+    print(a)
     
     Nuclides = [H1, O16, U235, U238]
     Test_3 = Scatter_Matrix(Nuclides, N, Casmo_16, so, 300)

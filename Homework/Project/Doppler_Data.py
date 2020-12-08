@@ -1,17 +1,21 @@
-""" Homework for NE806, Neutronics
+""" Final Project for NE806, Neutronics
     
     Author: Keith Huddleston
      Email: kdhuddle@ksu.edu
      
     Note, expect this file to run for awhile!
+    Last Edit: Dec. 7, 2020
 """
 
 # ============================================================================
 # Import statements
 # ============================================================================
 import numpy as np
-from Plot_BNL_Data import Nuclide_Data
 from scipy.special import erf
+
+# Custom files written for project
+from Utilities.Utilities import Nuclide
+
 
 # ============================================================================
 # Create Text Files Containing the Doppler Broadened Cross Sections
@@ -110,8 +114,8 @@ def Doppler(E2, E1, S1, T1, T2, M, m=1.009):
     return S2
 
 def Make_Doppler_Data(Nuclide, Temp, Energy=None):
-    print('='*28 + '\nDoppler Broadening ' + Nuclide.N + ' Data' + '\n' + \
-          '='*28 + '\n')
+    print('='*79 + '\nDoppler Broadening ' + Nuclide.N + ' Data' + '\n' + \
+          '='*79 + '\n')
     data_type = ['ES', 'Total', 'Fission']
     for i in Temp:
         print('Broadening Data for Temperature ' + str(i) + \
@@ -120,13 +124,13 @@ def Make_Doppler_Data(Nuclide, Temp, Energy=None):
         NXS = [0, 0, 0]
         for j in range(3):
             if Nuclide.B[j]:
-                E1 = Nuclide.EM[300][j]
-                XS = Nuclide.XS[300][j]
+                E1 = Nuclide.e[300][j]
+                XS = Nuclide.s[300][j]
                 NXS[j] = Doppler(E1, E1, XS, 300, i, Nuclide.M)
                 NEM[j] = E1
                 
-        Nuclide.EM[i] = NEM
-        Nuclide.XS[i] = NXS
+        Nuclide.e[i] = NEM
+        Nuclide.s[i] = NXS
         
         print('Saving Broadened Data to .txt files\n')
         for j in range(3):
@@ -147,14 +151,14 @@ if __name__ == "__main__":
     Temps = [600, 900, 1200]
     
     # Define the objects for containing data for H1, O16, U_235, U_238 
-    H1 = Nuclide_Data('H1', 1.008, [1, 1, 0])
-    O16 = Nuclide_Data('O16', 15.995, [1, 1, 0])
-    U235 = Nuclide_Data('U235', 235.044, [1, 1, 1])
-    U238 = Nuclide_Data('U238', 238.051, [1, 1, 1])
+    H1   = Nuclide('H1',   1,   1.008,   [1, 1, 0])
+    O16  = Nuclide('O16',  16,  15.995,  [1, 1, 0])
+    U235 = Nuclide('U235', 235, 235.044, [1, 1, 1])
+    U238 = Nuclide('U238', 238, 238.051, [1, 1, 1])
     
     # Doppler-Broaden Data
-    Make_Doppler_Data(H1, Temps)
-    Make_Doppler_Data(O16, Temps)
+    Make_Doppler_Data(H1,   Temps)
+    Make_Doppler_Data(O16,  Temps)
     Make_Doppler_Data(U235, Temps)
     Make_Doppler_Data(U238, Temps)
 

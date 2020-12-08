@@ -15,8 +15,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # File written for class
-from Project_Utilities import Nuclide_Data
-from Removal_Matrix import Background_Cross_Section
+from Utilities.Utilities import Nuclide
+from Utilities.Utilities import Background_Cross_Section
 from Removal_Matrix import Removal_Matrix
 from Scatter_Matrix import Scatter_Matrix
 from Fission_Matrix import Fission_Matrix
@@ -24,24 +24,24 @@ from Fission_Matrix import Fission_Matrix
 # ============================================================================
 # Load Interpolated Interpreted Plotted Data Files and Doppler-Broadened Data
 # ============================================================================
-H1 = Nuclide_Data('H1', 1.008, [1, 1, 0], 1)
+H1 = Nuclide('H1', 1, 1.008, [1, 1, 0])
 H1.Load_Doppler_Data([600, 900, 1200])
 
-O16 = Nuclide_Data('O16', 15.995, [1, 1, 0], 16)
+O16 = Nuclide('O16', 16, 15.995, [1, 1, 0])
 O16.Load_Doppler_Data([600, 900, 1200])
 
-U235 = Nuclide_Data('U235', 235.044, [1, 1, 1], 235)
+U235 = Nuclide('U235', 235, 235.044, [1, 1, 1])
 U235.Load_Doppler_Data([600, 900, 1200])
 
-U238 = Nuclide_Data('U238', 238.051, [1, 1, 1], 238)
+U238 = Nuclide('U238', 238, 238.051, [1, 1, 1])
 U238.Load_Doppler_Data([600, 900, 1200])
 
 # ============================================================================
 # Testing
 # ============================================================================
-if False:
+if True:
     Nuclides = [H1, O16, U235, U238]
-    N = [6, 7, 0.1, 1.9]
+    N = [6, 7, 10, 1.9]
     s = [20, 10, 10, 0]
     Temperature = 300
     nu = 2.54
@@ -71,7 +71,7 @@ if False:
     A = np.dot(np.linalg.inv(T), F)
     k = np.linalg.eig(A)
 
-if True:
+if False:
     Nuclides = [H1, O16, U235, U238]
     N = [6, 7, 0, 0]
     s = [20, 10, 10, 0]

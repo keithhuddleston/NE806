@@ -1,4 +1,4 @@
-""" Homework for NE806, Neutronics
+""" Final Project for NE806, Neutronics
     
     Author: Keith Huddleston
      Email: kdhuddle@ksu.edu
@@ -6,14 +6,17 @@
     Create data files for the flux averaged cross sections. Note that plotting
     is being performed in this file as well, in contrast to the Doppler-Broad-
     ening step.
+    
+    Last Edit: Dec. 7, 2020
 """
 
 # ============================================================================
 # Import statements
 # ============================================================================
 import numpy as np
-import matplotlib.pyplot as plt
-from Project_Utilities import Nuclide_Data # File written for class
+
+# Custom files written for project
+from Utilities.Utilities import Nuclide
 
 
 # ============================================================================
@@ -64,36 +67,35 @@ def Group(e_vals, xs_vals, Group_Structure, e_total, xs_total, xs_dilution):
 
 def Make_Group_Data(Nuclide, Group_Structure, Dilution):
     """ Create flux weighted averages cross section data """
-    print('='*41+'\nGrouping '+Nuclide.N+' Data for '+\
-          str(len(Group_Structure)-1)+' group structure'+'\n'+\
-          '='*41+'\n')
-    if len(Nuclide.T) < 2:
-        print("Warning, no Doppler-Broadened data is loaded in Nuclide!\n")
+    Length = len(Group_Structure)
+    Shape = Length - 1
+    Folder_Name = 'Data/Group/'+str(Shape)+'/'
+    print('='*79+'\nSaving '+Nuclide.N+' group data for '+\
+          str(Shape)+' group structure to '+Folder_Name+'\n'+\
+          '='*79+'\n')
+
     Temperatures = Nuclide.T
     data_type = ['ES', 'Total', 'Fission']
     for t in Temperatures:
         for i in range(len(Nuclide.B)):
+            # Total cross-section data is always index 1
+            et = Nuclide.e[t][1]
+            st = Nuclide.s[t][1]
             if Nuclide.B[i]:
-                # Total cross-section data is always index 1
-                et = Nuclide.EM[t][1]
-                st = Nuclide.XS[t][1]
                 print('Grouping data at '+str(t)+u"\N{DEGREE SIGN}K"+' for '
                       +data_type[i]+' XS\n')
-                group_data = np.zeros((len(Group_Structure), len(Dilution)))
+                group_data = np.zeros((Length, len(Dilution)))
                 for j in range(len(Dilution)):
                     group_data[0][j] = Dilution[j]
-                    e = Nuclide.EM[t][i]
-                    s = Nuclide.XS[t][i]
+                    e = Nuclide.e[t][i]
+                    s = Nuclide.s[t][i]
                     d = Dilution[j]
-                    # Change second bool if you want plotting
-                    if i == 1:
-                        column = Group(e, s, Casmo_16, et, st, d)
-                    else:
-                        column = Group(e, s, Casmo_16, et, st, d)
+                    column = Group(e, s, Group_Structure, et, st, d)
                     for k in range(len(column)):
                         group_data[k+1][j] = column[k]
-                file_name = 'Data/Group/'+Nuclide.N+'G_'+data_type[i]+'_'+str(t)+'.txt'
-                np.savetxt(file_name, group_data)
+                File_Name = Folder_Name+Nuclide.N+'G_'+data_type[i]+'_'+str(t)+'.txt'
+                np.savetxt(File_Name, group_data)
+    # Nothing to return, all data is stored in text files.
     return
 
 
@@ -104,16 +106,16 @@ if __name__ == '__main__':
     # --- Function Testing Section ---
     print('Testing the file Group_Data.py\n')
     
-    H1 = Nuclide_Data('H1', 1.008, [1, 1, 0], 1)
+    H1 = Nuclide('H1', 1, 1.008, [1, 1, 0])
     H1.Load_Doppler_Data([600, 900, 1200])
     
-    O16 = Nuclide_Data('O16', 15.995, [1, 1, 0], 16)
+    O16 = Nuclide('O16', 16, 15.995, [1, 1, 0])
     O16.Load_Doppler_Data([600, 900, 1200])
     
-    U235 = Nuclide_Data('U235', 235.044, [1, 1, 1], 235)
+    U235 = Nuclide('U235', 235, 235.044, [1, 1, 1])
     U235.Load_Doppler_Data([600, 900, 1200])
     
-    U238 = Nuclide_Data('U238', 238.051, [1, 1, 1], 238)
+    U238 = Nuclide('U238', 238, 238.051, [1, 1, 1])
     U238.Load_Doppler_Data([600, 900, 1200])
     
     Casmo_16 = np.array([1.00e1,   8.21e-1,  5.53e-3, 4.00e-6, 1.30e-6, 
@@ -130,11 +132,16 @@ if __name__ == '__main__':
 
     # Test
     # e_vals, xs_vals, Group_Structure, e_total, xs_total, xs_dilution
-    e_vals, xs_vals = H1.EM[300][1], H1.XS[300][1]
-    e_total, xs_total = H1.EM[300][1], H1.XS[300][1]
+    e_vals, xs_vals = H1.e[300][1], H1.s[300][1]
+    e_total, xs_total = H1.e[300][1], H1.s[300][1]
     Test_0 = Group(e_vals, xs_vals, Casmo_16, e_total, xs_total, 101)
-
-    Make_Group_Data(H1, Casmo_16, Dilution)
-    Make_Group_Data(O16, Casmo_16, Dilution)
+    
+    Make_Group_Data(H1,   Casmo_2, Dilution)
+    Make_Group_Data(O16,  Casmo_2, Dilution)
+    Make_Group_Data(U235, Casmo_2, Dilution)
+    Make_Group_Data(U238, Casmo_2, Dilution)
+    
+    Make_Group_Data(H1,   Casmo_16, Dilution)
+    Make_Group_Data(O16,  Casmo_16, Dilution)
     Make_Group_Data(U235, Casmo_16, Dilution)
     Make_Group_Data(U238, Casmo_16, Dilution)
