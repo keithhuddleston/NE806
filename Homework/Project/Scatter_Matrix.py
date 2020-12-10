@@ -92,7 +92,7 @@ def Scatter_Matrix(Nuclides, Ns, group_structure, Dilution, Temperature):
         matrix = Micro_Scatter_Matrix(Nuclides[i], group_structure, 
                                       Dilution, Temperature)
         S = S + matrix*Ns[i]
-    # plt.matshow(S)
+    plt.matshow(S)
     return S
 
 # ============================================================================

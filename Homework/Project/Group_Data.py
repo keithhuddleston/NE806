@@ -119,12 +119,12 @@ if __name__ == '__main__':
     U238.Load_Doppler_Data([600, 900, 1200])
     
     Casmo_16 = np.array([1.00e1,   8.21e-1,  5.53e-3, 4.00e-6, 1.30e-6, 
-                         1.15e-6,  1.097e-6, 1.02e-6, 9.71e-7, 8.50e-7, 
-                         6.25e-7,  3.50e-7,  2.80e-7, 1.40e-7, 5.80e-8, 
-                         3.00e-8,  1.00e-11])*1e6# eV
+                          1.15e-6,  1.097e-6, 1.02e-6, 9.71e-7, 8.50e-7, 
+                          6.25e-7,  3.50e-7,  2.80e-7, 1.40e-7, 5.80e-8, 
+                          3.00e-8,  1.00e-11])*1e6# eV
     Casmo_16 = Casmo_16[::-1]
     
-    Casmo_2 = np.array([1.00e1, 1.00e-7, 1.00e-11]) # MeV
+    Casmo_2 = np.array([1.00e1, 1.00e-7, 1.00e-11])*1e6 # MeV
     Casmo_2 = Casmo_2[::-1]
 
     # Microscopic Dilution/Background Cross Section
@@ -134,7 +134,7 @@ if __name__ == '__main__':
     # e_vals, xs_vals, Group_Structure, e_total, xs_total, xs_dilution
     e_vals, xs_vals = H1.e[300][1], H1.s[300][1]
     e_total, xs_total = H1.e[300][1], H1.s[300][1]
-    Test_0 = Group(e_vals, xs_vals, Casmo_16, e_total, xs_total, 101)
+    Test_0 = Group(e_vals, xs_vals, Casmo_2, e_total, xs_total, 101)
     
     Make_Group_Data(H1,   Casmo_2, Dilution)
     Make_Group_Data(O16,  Casmo_2, Dilution)

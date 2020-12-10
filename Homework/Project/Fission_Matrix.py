@@ -164,7 +164,7 @@ if __name__ == '__main__':
     # This dataset should be about the same as H1G_Total_300.txt
     Test_1 = Interpolate_Group(H1, 300, so, Casmo_16, 'Total')
     Test_2 = Interpolate_Group(H1, 300, so, Casmo_16, 'Fission')
-
+    
     Chi_16 = Chi_Matrix(Casmo_16)
     Chi_2 = Chi_Matrix(Casmo_2)
 
@@ -217,3 +217,5 @@ if __name__ == '__main__':
     plt.show(), print('\n')
     
     Test_3 = Fission_Matrix(Nu, N, Nuclides, 300, so, Casmo_16)
+    
+    Test_3 = Fission_Matrix(Nu, N, Nuclides, 300, so, Casmo_2)
