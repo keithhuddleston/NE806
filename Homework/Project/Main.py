@@ -71,7 +71,7 @@ if True:
                              1.15e-6,  1.097e-6, 1.02e-6, 9.71e-7, 8.50e-7, 
                              6.25e-7,  3.50e-7,  2.80e-7, 1.40e-7, 5.80e-8, 
                              3.00e-8,  1.00e-11])  # MeV
-        Casmo_2 = np.array([1.00e1, 1.00e-7, 1.00e-11])*1e6 # eV
+        Casmo_2 = np.array([1.00e1, 1.00e-7, 1.00e-11]) # MeV
         F = Fission_Matrix(nu, N, Nuclides, 300, so, Casmo_2)
         
         A = np.matmul(np.linalg.inv(T), F)
