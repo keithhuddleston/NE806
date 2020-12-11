@@ -62,7 +62,7 @@ if True:
         R = Removal_Matrix(N, Nuclides, 300, so, Casmo_2)
         Casmo_16 = Casmo_16[::-1]
         Casmo_2 = Casmo_2[::-1]
-        S = Scatter_Matrix(Nuclides, N, Casmo_2, so, 300)
+        S = Scatter_Matrix(Nuclides, N, Casmo_2, so, 6300)
         T = R - S
         plt.matshow(R)
         plt.matshow(S)
